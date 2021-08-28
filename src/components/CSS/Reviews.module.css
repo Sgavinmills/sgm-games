@@ -1,0 +1,143 @@
+
+.reviews-container {
+    width: 70%;
+    margin: 6rem auto 0 auto;
+    position: relative;
+    /* top: 25vh; */
+    z-index: -1;
+}
+
+.review-box {
+    margin: 5rem 0 0 0;
+    border: 2px solid black;
+    /* background-color: rgba(244, 250, 244, 0.8); */
+    background-color: rgba(244, 250, 244, 1);
+
+    padding: 1rem;
+    border-radius: 5px;
+    
+}
+
+.main-review-box {
+    margin-top: 0.7rem;
+    display: flex;
+    justify-content: center;
+}
+.review-image {
+    width: 200px;
+    flex-basis: 25%;
+    border-radius: 5px; 
+}
+
+.review-text {
+    flex-basis: 75%;
+    text-align: center;
+}
+
+.review-body-paragraph {
+    font-size: 2rem;
+    font-family: 'Work Sans', sans-serif;
+}
+
+
+.review-box-info-bar-list {
+    margin: 0;
+    padding: 0.5rem 0 0.5rem 0;
+    display: flex;
+    list-style: none;
+    justify-content: space-evenly;
+    border: 1px solid black;
+    background-color: rgba(0, 68, 0, 0.3);  
+    border-radius: 5px;
+}
+
+.info-header {
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-transform: uppercase;  
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+
+
+}
+
+.info-text {
+    font-size: 1.2rem;
+    text-align: center;
+    font-family: 'Work Sans', sans-serif;
+
+}
+
+.pagination {
+    font-size: 3rem;
+    color: white;
+    position: relative;
+
+}
+
+.pagination-container {
+    background-color: rgba(0, 68, 0);  
+    border: 2px solid black;
+    padding: 0;
+    margin: 0;
+    width: 300px;
+    margin: auto;
+}
+
+.pagination-arrow:hover {
+ 
+        cursor: pointer;
+    
+}
+
+.filter-button {
+    border: 3px solid black;
+    padding: 0.7rem 1rem;
+    font-size: 3rem;
+    background-color: rgb(22, 44, 2);
+    color: white;
+    position: fixed;
+    left: 2rem;
+    top: 30%;
+    z-index:2;
+}
+
+.filter-container {
+    position: fixed;
+    width: 30%;
+    border: 2px solid black;
+    background-color: rgba(244, 250, 244, 1);
+    padding: 1rem 1rem 1rem 1rem;
+    top: calc(30% + 60px);
+    /* top: 30%; */
+    left: 2rem;
+    
+}
+
+/*not finishing playing with these yet but works nicely.
+boxes to fill width of screen and have tiny gap between them on small screens (like reddit posts on the app)
+kinda works on large screen too.
+
+can also lose the filter / new review button on small screens and use bottom nav bar instead?
+
+And still need to shrink text in the review box info bar*/
+@media only screen and (max-width: 1024px) {
+    .reviews-container {
+        width: 98%;
+        margin: 0.1rem auto 0 auto;
+        position: relative;
+        /* top: 25vh; */
+        z-index: -1;
+    }
+    
+    .review-box {
+        margin: 0rem 0 0 0;
+    
+                
+    }
+
+    .main-review-box {
+        flex-direction: column;
+        align-items: center;
+    }
+  }
