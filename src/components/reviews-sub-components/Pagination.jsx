@@ -14,7 +14,7 @@ export default function Pagination({setFilters, filters, totalItems}) {
                         })
                     }}>
                         {filters.p > 1 && <i className="fas fa-arrow-left"></i>}
-                    </span>
+                        </span>
                     Page {filters.p} of {Math.ceil(totalItems / filters.limit)}
                     <span className={styles['pagination-arrow']} onClick={() => {
                         setFilters(currFilter => {

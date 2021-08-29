@@ -32,3 +32,17 @@ export const getCategories = async () => {
     const response = await reviewsAPI.get(`/categories`);
     return response.data;
 }
+
+export const patchVotes = async (review_id, vote_type, voted_by) => {
+    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { voted_by : voted_by, vote_type : vote_type });
+}
+
+export const getLikedReviews = async (user) => {
+    const response = await reviewsAPI.get(`/votes/${user}/reviews`);
+    return response.data;
+}
+
+export const getLikedComments = async (user) => {
+    const response = await reviewsAPI.get(`/votes/${user}/comments`);
+    return response.data;
+}

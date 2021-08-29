@@ -2,9 +2,9 @@
 .reviews-container {
     width: 70%;
     margin: 6rem auto 0 auto;
-    position: relative;
+    /* position: relative; */
     /* top: 25vh; */
-    z-index: -1;
+    /* z-index: -1; */
 }
 
 .review-box {
@@ -68,6 +68,13 @@
 
 }
 
+.votes-thumbs {
+    z-index: 1000;
+}
+.votes-thumbs:hover {
+    cursor: pointer;
+}
+
 
 
 
@@ -85,7 +92,6 @@ And still need to shrink text in the review box info bar*/
         margin: 0.1rem auto 0 auto;
         position: relative;
         /* top: 25vh; */
-        z-index: -1;
     }
     
     .review-box {
