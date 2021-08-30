@@ -32,38 +32,28 @@ export default function Reviews({ categories, loggedInUser, likedReviews, setLik
             })
     }, [filters])
 
-
     const changeVotes = (review_id, vote_type, loggedInUser) => {
-
-
-        if (!likedReviews.some(review => review.review_id === review_id)) {
-            //if its not in the liked review list
-            //stick in in the likedReview list, with the vote_type property
+        const theLikedReview = likedReviews.find(review => review.review_id === review_id);
+        if (!theLikedReview) {
+            //if its not in the liked review list then stick in in the likedReview list
             const thisReview = reviewsList.find(review => review.review_id === review_id);
-            if (thisReview.votes !== 0) {
+            if (thisReview.votes !== 0) { 
                 setLikedReviews(currLikedReviews => {
                     const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-                    const reviewToEdit = reviewsList.find(review => review.review_id === review_id);
-                    const newReviewToEdit = { ...reviewToEdit };
+                    const newReviewToEdit = { ...thisReview };
                     newReviewToEdit.vote_type = vote_type;
                     newLikedReviews.push(newReviewToEdit);
-                    console.log(newReviewToEdit);
                     return newLikedReviews;
                 })
-
                 setReviewsList(currReviews => {
                     const newReviews = currReviews.map(review => { return { ...review } });
                     const reviewToEdit = newReviews.find(review => review.review_id === review_id);
                     reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 1 : reviewToEdit.votes - 1;
                     return newReviews;
                 })
-
-                patchVotes(review_id, vote_type, loggedInUser).catch()
             }
         } else {
-            //if it is in the liked review list
-            //if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
-            const theLikedReview = likedReviews.find(review => review.review_id === review_id);
+            //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
             if (theLikedReview.vote_type === vote_type) {
                 setLikedReviews(currLikedReviews => {
                     const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
@@ -71,47 +61,30 @@ export default function Reviews({ categories, loggedInUser, likedReviews, setLik
                     newLikedReviews.splice(theLikedReviewIndex, 1);
                     return newLikedReviews;
                 })
-
                 setReviewsList(currReviews => {
                     const newReviews = currReviews.map(review => { return { ...review } });
                     const reviewToEdit = newReviews.find(review => review.review_id === review_id);
                     reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes - 1 : reviewToEdit.votes + 1;
                     return newReviews;
-
                 })
-                console.log(vote_type);
-                patchVotes(review_id, vote_type, loggedInUser).catch() // <--vote_type needs to be opposite of passed in vote type (maybe notactually...)
-
-
             } else {
-                //if it is in the liked review list and the liked review vote_type does not match the vote_type passed in
-                //then it means it was downvoted and were changing that to an up vote,or vica versa
-                //so in the liked review list change the vote_type to the opposite
+                //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
                 setLikedReviews(currLikedReviews => {
                     const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
                     const theLikedReview = newLikedReviews.find(review => review.review_id === review_id);
                     theLikedReview.vote_type = theLikedReview.vote_type === 'up' ? 'down' : 'up';
-                    console.log(theLikedReview);
                     return newLikedReviews;
 
                 })
-
                 setReviewsList(currReviews => {
                     const newReviews = currReviews.map(review => { return { ...review } });
                     const reviewToEdit = newReviews.find(review => review.review_id === review_id);
                     reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 2 : reviewToEdit.votes - 2;
                     return newReviews;
                 })
-
-                patchVotes(review_id, vote_type, loggedInUser).catch()
             }
-
         }
-
-
-
-
-
+        patchVotes(review_id, vote_type, loggedInUser).catch()
     }
 
 

@@ -19,21 +19,21 @@ function App() {
       .then(data => {
         setCategories(data.categories);
       })
-  }, [])
+  }, [loggedInUser])
 
   useEffect(() => {
     getLikedReviews(loggedInUser) 
       .then(data => {
         setLikedReviews(data.reviews);
       })
-  }, [])
+  }, [loggedInUser])
 
   useEffect(() => {
     getLikedComments(loggedInUser) 
       .then(data => {
         setLikedComments(data.comments);
       })
-  }, [])
+  }, [loggedInUser])
 
   console.log(likedComments)
 
