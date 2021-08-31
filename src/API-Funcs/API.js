@@ -37,6 +37,16 @@ export const patchVotes = async (review_id, vote_type, voted_by) => {
     const response = await reviewsAPI.patch(`/reviews/${review_id}`, { voted_by : voted_by, vote_type : vote_type });
 }
 
+export const patchCommentVotes = async (comment_id, vote_type, voted_by) => {
+    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { voted_by : voted_by, vote_type : vote_type });
+}
+
+export const patchReview = async (review_id, review_body) => {
+    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { review_body : review_body });
+}
+export const patchComment = async (comment_id, body) => {
+    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { body : body });
+}
 export const getLikedReviews = async (user) => {
     const response = await reviewsAPI.get(`/votes/${user}/reviews`);
     return response.data;
@@ -44,5 +54,27 @@ export const getLikedReviews = async (user) => {
 
 export const getLikedComments = async (user) => {
     const response = await reviewsAPI.get(`/votes/${user}/comments`);
+    return response.data;
+}
+
+export const postReview = async (postBody) => {
+    const response = await reviewsAPI.post(`/reviews`, postBody);
+    return response.data;
+}
+
+export const postComment = async (postBody, review_id) => {
+    const response = await reviewsAPI.post(`/reviews/${review_id}/comments`, postBody);
+    return response.data;
+}
+
+export const deleteReview = async (review_id) => {
+    const response = await reviewsAPI.delete(`/reviews/${review_id}`);
+}
+export const deleteComment = async (comment_id) => {
+    const response = await reviewsAPI.delete(`/comments/${comment_id}`);
+}
+
+export const getCommentsByReviewId = async (review_id) => {
+    const response = await reviewsAPI.get(`/reviews/${review_id}/comments`);
     return response.data;
 }

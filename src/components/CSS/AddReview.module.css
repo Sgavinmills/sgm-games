@@ -1,0 +1,53 @@
+.form-container {
+    background-color: rgba(244, 250, 244, 1);
+    width: 50%;
+    margin: 3rem auto;
+    text-align: center;
+    border-radius: 5px; 
+    padding: 1rem;
+}
+
+.add-review-form > input, .add-review-form > select {
+    width: 80%;
+    margin: 2rem auto 0rem auto;
+    padding: 0; 
+}
+
+.form-header-paragraph {
+    font-family: 'Work Sans', sans-serif;
+    text-align: center;
+    font-size: 3rem;
+}
+
+input {
+    height : 3rem;
+}
+.review-body {
+    height: 30rem;
+}
+
+.form-title-container {
+    background-color: rgba(0, 68, 0, 0.3);  
+    width: 80%;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.final-options {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    justify-content: space-between;
+}
+
+.error-paragraph {
+    /* position: absolute; */
+    /* margin: 0;
+    padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red; */
+    /* text-align: center; */
+}
