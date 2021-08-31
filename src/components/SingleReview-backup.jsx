@@ -9,9 +9,6 @@ import EditReviewsButton from "./reviews-sub-components/EditReviewsButton";
 import EditReviewsForm from './reviews-sub-components/EditReviewsForm';
 import EditCommentsButton from "./reviews-sub-components/EditCommentsButton";
 import EditCommentsForm from "./reviews-sub-components/EditCommentsForm";
-import ReviewsVotes from "./reviews-sub-components/ReviewsVotes";
-import CommentsVotes from "./reviews-sub-components/CommentsVotes";
-import Pagination from "./reviews-sub-components/Pagination";
 
 
 
@@ -24,15 +21,6 @@ export default function SingleReview({likedReviews, setLikedReviews, loggedInUse
   const [likedComments, setLikedComments] = useState([]);
   const [postingComment, setPostingComment] = useState(false);
  const [isLoadingComments, setIsLoadingComments] = useState(true);
-
- const [filters, setFilters] = useState({
-    p: 1,
-    limit: 10,
-});
-
-const [totalItems, setTotalItems] = useState(0);
-
-
 console.log('singlereview page - ' + newCommentInput)
     useEffect(() => {
         setIsLoadingComments(true);
@@ -42,14 +30,12 @@ console.log('singlereview page - ' + newCommentInput)
                 setReview(response.reviews);
                 setIsLoading(false);
             })
-        getCommentsByReviewId(review_id, filters)
+        getCommentsByReviewId(review_id)
             .then((response) => {
                 setCommentsList(response.comments);
                 setIsLoadingComments(false);
-                setTotalItems(response.total_count);
-
             })
-    }, [review_id, filters])
+    }, [review_id])
 
 
   useEffect(() => {
@@ -59,115 +45,115 @@ console.log('singlereview page - ' + newCommentInput)
       })
   }, [loggedInUser])
 
-    // const changeVotes = (review_id, vote_type, loggedInUser) => {
-    //     const theLikedReview = likedReviews.find(review => review.review_id === review_id);
-    //     const thisReview = review;
-    //     if((thisReview.votes === 0 && vote_type === 'down') || (theLikedReview && vote_type === 'down' && thisReview.votes === 1)) {} else {
-    //     if (!theLikedReview) {
-    //         //if its not in the liked review list then stick in in the likedReview list
-    //             setLikedReviews(currLikedReviews => {
-    //                 const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                 const newReviewToEdit = { ...thisReview };
-    //                 newReviewToEdit.vote_type = vote_type;
-    //                 newLikedReviews.push(newReviewToEdit);
-    //                 return newLikedReviews;
-    //             })
-    //             setReview(currReview => {
-    //                 const newReview = {...currReview};
-    //                 newReview.votes = vote_type === 'up' ? newReview.votes + 1 : newReview.votes - 1;
-    //                 return newReview;
-    //             })
+    const changeVotes = (review_id, vote_type, loggedInUser) => {
+        const theLikedReview = likedReviews.find(review => review.review_id === review_id);
+        const thisReview = review;
+        if((thisReview.votes === 0 && vote_type === 'down') || (theLikedReview && vote_type === 'down' && thisReview.votes === 1)) {} else {
+        if (!theLikedReview) {
+            //if its not in the liked review list then stick in in the likedReview list
+                setLikedReviews(currLikedReviews => {
+                    const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                    const newReviewToEdit = { ...thisReview };
+                    newReviewToEdit.vote_type = vote_type;
+                    newLikedReviews.push(newReviewToEdit);
+                    return newLikedReviews;
+                })
+                setReview(currReview => {
+                    const newReview = {...currReview};
+                    newReview.votes = vote_type === 'up' ? newReview.votes + 1 : newReview.votes - 1;
+                    return newReview;
+                })
             
-    //     } else {
-    //         //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
-    //         if (theLikedReview.vote_type === vote_type) {
-    //             setLikedReviews(currLikedReviews => {
-    //                 const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                 const theLikedReviewIndex = newLikedReviews.findIndex(review => review.review_id === review_id);
-    //                 newLikedReviews.splice(theLikedReviewIndex, 1);
-    //                 return newLikedReviews;
-    //             })
-    //             setReview(currReview => {
-    //                 const newReview = {...currReview}
-    //                 newReview.votes = vote_type === 'up' ? newReview.votes - 1 : newReview.votes + 1;
-    //                 return newReview;
-    //             })
-    //         } else {
-    //             //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
-    //             setLikedReviews(currLikedReviews => {
-    //                 const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                 const theLikedReview = newLikedReviews.find(review => review.review_id === review_id);
-    //                 theLikedReview.vote_type = theLikedReview.vote_type === 'up' ? 'down' : 'up';
-    //                 return newLikedReviews;
+        } else {
+            //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
+            if (theLikedReview.vote_type === vote_type) {
+                setLikedReviews(currLikedReviews => {
+                    const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                    const theLikedReviewIndex = newLikedReviews.findIndex(review => review.review_id === review_id);
+                    newLikedReviews.splice(theLikedReviewIndex, 1);
+                    return newLikedReviews;
+                })
+                setReview(currReview => {
+                    const newReview = {...currReview}
+                    newReview.votes = vote_type === 'up' ? newReview.votes - 1 : newReview.votes + 1;
+                    return newReview;
+                })
+            } else {
+                //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
+                setLikedReviews(currLikedReviews => {
+                    const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                    const theLikedReview = newLikedReviews.find(review => review.review_id === review_id);
+                    theLikedReview.vote_type = theLikedReview.vote_type === 'up' ? 'down' : 'up';
+                    return newLikedReviews;
 
-    //             })
-    //             setReview(currReview => {
-    //                 const newReview = {...currReview}
-    //                 newReview.votes = vote_type === 'up' ? newReview.votes + 2 : newReview.votes - 2;
-    //                 return newReview;
-    //             })
-    //         }
-    //     }
-    //     patchVotes(review_id, vote_type, loggedInUser).catch()
+                })
+                setReview(currReview => {
+                    const newReview = {...currReview}
+                    newReview.votes = vote_type === 'up' ? newReview.votes + 2 : newReview.votes - 2;
+                    return newReview;
+                })
+            }
+        }
+        patchVotes(review_id, vote_type, loggedInUser).catch()
         
-    // }
-    // }
+    }
+    }
 
-    // const changeCommentVotes = (comment_id, vote_type, loggedInUser) => {
-    //     const theLikedComment = likedComments.find(comment => comment.comment_id === comment_id);
-    //     const thisComment = commentsList.find(comment => comment.comment_id === comment_id);
-    //     if((thisComment.votes === 0 && vote_type === 'down') || (theLikedComment && vote_type === 'down' && thisComment.votes === 1)) {} else {
-    //     if (!theLikedComment) {
-    //         //if its not in the liked review list then stick in in the likedReview list
-    //             setLikedComments(currLikedComments => {
-    //                 const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
-    //                 const newCommentToEdit = { ...thisComment };
-    //                 newCommentToEdit.vote_type = vote_type;
-    //                 newLikedComments.push(newCommentToEdit);
-    //                 return newLikedComments;
-    //             })
-    //             setCommentsList(currComments => {
-    //                 const newComments = currComments.map(comment => { return { ...comment } });
-    //                 const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
-    //                 commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes + 1 : commentToEdit.votes - 1;
-    //                 return newComments;
-    //             })
+    const changeCommentVotes = (comment_id, vote_type, loggedInUser) => {
+        const theLikedComment = likedComments.find(comment => comment.comment_id === comment_id);
+        const thisComment = commentsList.find(comment => comment.comment_id === comment_id);
+        if((thisComment.votes === 0 && vote_type === 'down') || (theLikedComment && vote_type === 'down' && thisComment.votes === 1)) {} else {
+        if (!theLikedComment) {
+            //if its not in the liked review list then stick in in the likedReview list
+                setLikedComments(currLikedComments => {
+                    const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
+                    const newCommentToEdit = { ...thisComment };
+                    newCommentToEdit.vote_type = vote_type;
+                    newLikedComments.push(newCommentToEdit);
+                    return newLikedComments;
+                })
+                setCommentsList(currComments => {
+                    const newComments = currComments.map(comment => { return { ...comment } });
+                    const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
+                    commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes + 1 : commentToEdit.votes - 1;
+                    return newComments;
+                })
             
-    //     } else {
-    //         //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
-    //         if (theLikedComment.vote_type === vote_type) {
-    //             setLikedComments(currLikedComments => {
-    //                 const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
-    //                 const theLikedCommentIndex = newLikedComments.findIndex(comment => comment.comment_id === comment_id);
-    //                 newLikedComments.splice(theLikedCommentIndex, 1);
-    //                 return newLikedComments;
-    //             })
-    //             setCommentsList(currComments => {
-    //                 const newComments = currComments.map(comment => { return { ...comment } });
-    //                 const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
-    //                 commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes - 1 : commentToEdit.votes + 1;
-    //                 return newComments;
-    //             })
-    //         } else {
-    //             //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
-    //             setLikedComments(currLikedComments => {
-    //                 const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
-    //                 const theLikedComment = newLikedComments.find(comment => comment.comment_id === comment_id);
-    //                 theLikedComment.vote_type = theLikedComment.vote_type === 'up' ? 'down' : 'up';
-    //                 return newLikedComments;
+        } else {
+            //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
+            if (theLikedComment.vote_type === vote_type) {
+                setLikedComments(currLikedComments => {
+                    const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
+                    const theLikedCommentIndex = newLikedComments.findIndex(comment => comment.comment_id === comment_id);
+                    newLikedComments.splice(theLikedCommentIndex, 1);
+                    return newLikedComments;
+                })
+                setCommentsList(currComments => {
+                    const newComments = currComments.map(comment => { return { ...comment } });
+                    const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
+                    commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes - 1 : commentToEdit.votes + 1;
+                    return newComments;
+                })
+            } else {
+                //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
+                setLikedComments(currLikedComments => {
+                    const newLikedComments = currLikedComments.map(comment => { return { ...comment } });
+                    const theLikedComment = newLikedComments.find(comment => comment.comment_id === comment_id);
+                    theLikedComment.vote_type = theLikedComment.vote_type === 'up' ? 'down' : 'up';
+                    return newLikedComments;
 
-    //             })
-    //             setCommentsList(currComments => {
-    //                 const newComments = currComments.map(comment => { return { ...comment } });
-    //                 const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
-    //                 commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes + 2 : commentToEdit.votes - 2;
-    //                 return newComments;
-    //             })
-    //         }
-    //     }
-    //     patchCommentVotes(comment_id, vote_type, loggedInUser).catch(e => console.log(e.response))
-    // }
-    // }
+                })
+                setCommentsList(currComments => {
+                    const newComments = currComments.map(comment => { return { ...comment } });
+                    const commentToEdit = newComments.find(comment => comment.comment_id === comment_id);
+                    commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes + 2 : commentToEdit.votes - 2;
+                    return newComments;
+                })
+            }
+        }
+        patchCommentVotes(comment_id, vote_type, loggedInUser).catch(e => console.log(e.response))
+    }
+    }
 
     if (isLoading) return <Loading />
     
@@ -195,15 +181,10 @@ console.log('singlereview page - ' + newCommentInput)
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Votes</p>
                                             <p className={styles['info-text']}>
-
-                                            <ReviewsVotes reviewObj={review} loggedInUser={loggedInUser} likedReviews={likedReviews} review={review} setLikedReviews={setLikedReviews} setReview={setReview}   >
-                                                    {review.votes}
-                                                </ReviewsVotes>
-
-                                                {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(review.review_id, 'down', loggedInUser) }} */}
-                                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
-                                                {/* {review.votes} */}
-                                                {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(review.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
+                                                <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(review.review_id, 'down', loggedInUser) }}
+                                                    className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span>
+                                                {review.votes}
+                                                <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(review.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span>
                                             </p>
                                         </li>
                                         <li className={styles['review-box-info-bar-list-item']}>
@@ -277,15 +258,10 @@ console.log('singlereview page - ' + newCommentInput)
                                         <li className={styles['comment-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Votes</p>
                                             <p className={styles['info-text']}>
-
-                                            <CommentsVotes likedComments={likedComments} commentObj={commentObj} loggedInUser={loggedInUser} commentsList={commentsList} setLikedComments={setLikedComments} setCommentsList={setCommentsList} >
+                                                <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeCommentVotes(commentObj.comment_id, 'down', loggedInUser) }}
+                                                    className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span>
                                                 {commentObj.votes}
-                                            </CommentsVotes>
-
-                                                {/* <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeCommentVotes(commentObj.comment_id, 'down', loggedInUser) }} */}
-                                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
-                                                {/* {commentObj.votes} */}
-                                                {/* <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeCommentVotes(commentObj.comment_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
+                                                <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeCommentVotes(commentObj.comment_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span>
                                             </p>
                                         </li>
                                         
@@ -333,8 +309,6 @@ console.log('singlereview page - ' + newCommentInput)
                 }
                 
             </div> : <AddComment loggedInUser={loggedInUser} review_id={review.review_id} setPostingComment={setPostingComment} setCommentsList={setCommentsList} /> }
-            <Pagination setFilters={setFilters} totalItems={totalItems} filters={filters} />
-                
         </div>
     )
 }

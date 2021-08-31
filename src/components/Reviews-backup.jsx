@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 import Loading from './Loading';
 import EditReviewsButton from './reviews-sub-components/EditReviewsButton';
 import EditReviewsForm from './reviews-sub-components/EditReviewsForm';
-import ReviewsVotes from './reviews-sub-components/ReviewsVotes';
 
 
 export default function Reviews({ isLoading, setIsLoading, categories, loggedInUser, likedReviews, setLikedReviews, newReviewInput, setNewReviewInput, reviewEditError, setReviewEditError, edittingReview, setEdittingReview  }) {
@@ -41,61 +40,61 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
             })
     }, [filters])
 
-    // const changeVotes = (review_id, vote_type, loggedInUser) => {
-    //     const theLikedReview = likedReviews.find(review => review.review_id === review_id);
-    //     const thisReview = reviewsList.find(review => review.review_id === review_id);
-    //     if ((thisReview.votes === 0 && vote_type === 'down') || (theLikedReview && vote_type === 'down' && thisReview.votes === 1)) { } else {
-    //         if (!theLikedReview) {
-    //             //if its not in the liked review list then stick in in the likedReview list
-    //             setLikedReviews(currLikedReviews => {
-    //                 const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                 const newReviewToEdit = { ...thisReview };
-    //                 newReviewToEdit.vote_type = vote_type;
-    //                 newLikedReviews.push(newReviewToEdit);
-    //                 return newLikedReviews;
-    //             })
-    //             setReviewsList(currReviews => {
-    //                 const newReviews = currReviews.map(review => { return { ...review } });
-    //                 const reviewToEdit = newReviews.find(review => review.review_id === review_id);
-    //                 reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 1 : reviewToEdit.votes - 1;
-    //                 return newReviews;
-    //             })
+    const changeVotes = (review_id, vote_type, loggedInUser) => {
+        const theLikedReview = likedReviews.find(review => review.review_id === review_id);
+        const thisReview = reviewsList.find(review => review.review_id === review_id);
+        if ((thisReview.votes === 0 && vote_type === 'down') || (theLikedReview && vote_type === 'down' && thisReview.votes === 1)) { } else {
+            if (!theLikedReview) {
+                //if its not in the liked review list then stick in in the likedReview list
+                setLikedReviews(currLikedReviews => {
+                    const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                    const newReviewToEdit = { ...thisReview };
+                    newReviewToEdit.vote_type = vote_type;
+                    newLikedReviews.push(newReviewToEdit);
+                    return newLikedReviews;
+                })
+                setReviewsList(currReviews => {
+                    const newReviews = currReviews.map(review => { return { ...review } });
+                    const reviewToEdit = newReviews.find(review => review.review_id === review_id);
+                    reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 1 : reviewToEdit.votes - 1;
+                    return newReviews;
+                })
 
-    //         } else {
-    //             //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
-    //             if (theLikedReview.vote_type === vote_type) {
-    //                 setLikedReviews(currLikedReviews => {
-    //                     const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                     const theLikedReviewIndex = newLikedReviews.findIndex(review => review.review_id === review_id);
-    //                     newLikedReviews.splice(theLikedReviewIndex, 1);
-    //                     return newLikedReviews;
-    //                 })
-    //                 setReviewsList(currReviews => {
-    //                     const newReviews = currReviews.map(review => { return { ...review } });
-    //                     const reviewToEdit = newReviews.find(review => review.review_id === review_id);
-    //                     reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes - 1 : reviewToEdit.votes + 1;
-    //                     return newReviews;
-    //                 })
-    //             } else {
-    //                 //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
-    //                 setLikedReviews(currLikedReviews => {
-    //                     const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
-    //                     const theLikedReview = newLikedReviews.find(review => review.review_id === review_id);
-    //                     theLikedReview.vote_type = theLikedReview.vote_type === 'up' ? 'down' : 'up';
-    //                     return newLikedReviews;
+            } else {
+                //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
+                if (theLikedReview.vote_type === vote_type) {
+                    setLikedReviews(currLikedReviews => {
+                        const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                        const theLikedReviewIndex = newLikedReviews.findIndex(review => review.review_id === review_id);
+                        newLikedReviews.splice(theLikedReviewIndex, 1);
+                        return newLikedReviews;
+                    })
+                    setReviewsList(currReviews => {
+                        const newReviews = currReviews.map(review => { return { ...review } });
+                        const reviewToEdit = newReviews.find(review => review.review_id === review_id);
+                        reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes - 1 : reviewToEdit.votes + 1;
+                        return newReviews;
+                    })
+                } else {
+                    //if vote_types dont match then swap over the types and adjust votes by 2(ie downvoting a previously upvoted post causes a swing of 2 )
+                    setLikedReviews(currLikedReviews => {
+                        const newLikedReviews = currLikedReviews.map(review => { return { ...review } });
+                        const theLikedReview = newLikedReviews.find(review => review.review_id === review_id);
+                        theLikedReview.vote_type = theLikedReview.vote_type === 'up' ? 'down' : 'up';
+                        return newLikedReviews;
 
-    //                 })
-    //                 setReviewsList(currReviews => {
-    //                     const newReviews = currReviews.map(review => { return { ...review } });
-    //                     const reviewToEdit = newReviews.find(review => review.review_id === review_id);
-    //                     reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 2 : reviewToEdit.votes - 2;
-    //                     return newReviews;
-    //                 })
-    //             }
-    //         }
-    //         patchVotes(review_id, vote_type, loggedInUser).catch()
-    //     }
-    // }
+                    })
+                    setReviewsList(currReviews => {
+                        const newReviews = currReviews.map(review => { return { ...review } });
+                        const reviewToEdit = newReviews.find(review => review.review_id === review_id);
+                        reviewToEdit.votes = vote_type === 'up' ? reviewToEdit.votes + 2 : reviewToEdit.votes - 2;
+                        return newReviews;
+                    })
+                }
+            }
+            patchVotes(review_id, vote_type, loggedInUser).catch()
+        }
+    }
 
     if (isLoading) return <Loading />
     
@@ -123,14 +122,10 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Votes</p>
                                             <p className={styles['info-text']}>
-
-                                                <ReviewsVotes reviewObj={reviewObj} loggedInUser={loggedInUser} likedReviews={likedReviews} reviewsList={reviewsList} setLikedReviews={setLikedReviews} setReviewsList={setReviewsList}   >
-                                                    {reviewObj.votes}
-                                                </ReviewsVotes>
-                                                {/* <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(reviewObj.review_id, 'down', loggedInUser) }} */}
-                                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
-                                                {/* {reviewObj.votes} */}
-                                                {/* <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(reviewObj.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
+                                                <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(reviewObj.review_id, 'down', loggedInUser) }}
+                                                    className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span>
+                                                {reviewObj.votes}
+                                                <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(reviewObj.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span>
                                             </p>
                                         </li>
                                         <li className={styles['review-box-info-bar-list-item']}>
