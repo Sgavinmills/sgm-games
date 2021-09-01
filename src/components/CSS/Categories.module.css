@@ -1,0 +1,27 @@
+.category-window {
+    width: 25rem;
+    height: 25rem;
+    border: 1.5rem solid rgb(22, 44, 2);
+    background-color: rgb(188, 190, 188);
+    border-radius: 50%;
+    margin: 5rem;
+}
+
+.categories-container {
+    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.category-display-header-paragraph {
+    font-size: 3rem;
+}
+
+.category-display-middle-paragraph {
+    font-size: 2rem;
+}
+
+.category-display-footer-paragraph {
+    
+}

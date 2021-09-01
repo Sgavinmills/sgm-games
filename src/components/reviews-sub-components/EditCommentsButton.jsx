@@ -9,7 +9,6 @@ export default function EditReviewsButton({setEdittingComment, setNewCommentInpu
                                      newEditObj.commentToEdit = commentObj.comment_id;
                                      return newEditObj;
                                  })
-                                 console.log(commentObj.body)
                                 setNewCommentInput(commentObj.body);
                                 setCommentEditError(false);
 

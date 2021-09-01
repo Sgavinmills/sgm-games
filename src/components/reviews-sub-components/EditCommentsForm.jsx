@@ -4,8 +4,9 @@ import styles from '../CSS/Reviews.module.css'
 import { useState } from 'react';
 
 
-export default function EditCommentsForm({setCommentEditError, setEdittingComment, setCommentsList, commentEditError, commentObj, newCommentInput, setNewCommentInput, setComment}) {
+export default function EditCommentsForm({setTotalItems, setErr, setCommentEditError, setEdittingComment, setCommentsList, commentEditError, commentObj, newCommentInput, setNewCommentInput, setComment}) {
     console.log(commentEditError);
+
     return (
             
             <form onSubmit={event => {
@@ -14,7 +15,13 @@ export default function EditCommentsForm({setCommentEditError, setEdittingCommen
                                             setCommentEditError(true);
                                         } else {
                                             //patch review
-                                            patchComment(commentObj.comment_id, newCommentInput);
+                                 console.log(commentObj.body)
+                                            patchComment(commentObj.comment_id, newCommentInput).catch(e => {
+                                                setErr({
+                                                    statusCode : e.response.status,
+                                                    msg : 'There was a problem, please try again'
+                                                });
+                                            });
                                             setCommentEditError(false);
                                             setEdittingComment({edittingComment : false, commentToEdit : ''});
                                             if(setCommentsList) {
@@ -24,6 +31,7 @@ export default function EditCommentsForm({setCommentEditError, setEdittingCommen
                                                 edittedComment.body = newCommentInput;
                                                 return newCommentList;
                                             })
+
                                         } else {
                                             setComment(currComment => {
                                                 const newComment = {...currComment};

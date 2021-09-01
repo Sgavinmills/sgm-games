@@ -8,11 +8,13 @@ import Loading from './Loading';
 import EditReviewsButton from './reviews-sub-components/EditReviewsButton';
 import EditReviewsForm from './reviews-sub-components/EditReviewsForm';
 import ReviewsVotes from './reviews-sub-components/ReviewsVotes';
+import Error from './Error';
 
 
 export default function Reviews({ isLoading, setIsLoading, categories, loggedInUser, likedReviews, setLikedReviews, newReviewInput, setNewReviewInput, reviewEditError, setReviewEditError, edittingReview, setEdittingReview  }) {
 
     const [reviewsList, setReviewsList] = useState([]);
+    const [err, setErr] = useState(null);
 
     // moving these 3 up to app.js REVERSE IF NECC
     // const [newReviewInput, setNewReviewInput] = useState('');
@@ -31,6 +33,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
     const [totalItems, setTotalItems] = useState(0);
 
     useEffect(() => {
+        setErr(null);
         setIsLoading(true);
         getReviews(filters)
             .then(data => {
@@ -38,6 +41,12 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                 setReviewsList(data.reviews);
                 setTotalItems(data.total_count);
                 setIsLoading(false);
+            }).catch(e => {
+                setErr({
+                    statusCode : e.response ? e.response.status : '',
+                    
+                    msg : 'There was a problem, please try again'
+                });
             })
     }, [filters])
 
@@ -96,6 +105,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
     //         patchVotes(review_id, vote_type, loggedInUser).catch()
     //     }
     // }
+    if(err) return <Error err={err} setErr={setErr} />
 
     if (isLoading) return <Loading />
     
@@ -124,7 +134,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                             <p className={styles['info-header']}>Votes</p>
                                             <p className={styles['info-text']}>
 
-                                                <ReviewsVotes reviewObj={reviewObj} loggedInUser={loggedInUser} likedReviews={likedReviews} reviewsList={reviewsList} setLikedReviews={setLikedReviews} setReviewsList={setReviewsList}   >
+                                                <ReviewsVotes setErr={setErr} reviewObj={reviewObj} loggedInUser={loggedInUser} likedReviews={likedReviews} reviewsList={reviewsList} setLikedReviews={setLikedReviews} setReviewsList={setReviewsList}   >
                                                     {reviewObj.votes}
                                                 </ReviewsVotes>
                                                 {/* <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(reviewObj.review_id, 'down', loggedInUser) }} */}
@@ -148,7 +158,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                         {/* //edit review form code */}
                                        { edittingReview.edittingReview && edittingReview.reviewToEdit === reviewObj.review_id ?
                                        
-                                       <EditReviewsForm newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={reviewObj} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReviewsList={setReviewsList} />
+                                       <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={reviewObj} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReviewsList={setReviewsList} />
                                     //    <form onSubmit={event => {
                                     //     event.preventDefault();
                                     //     if(newReviewInput.length < 20 || newReviewInput.length > 2000) {
@@ -185,7 +195,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                 </div>
 
                                 {/* edit and delete buttons */}
-                                {reviewObj.owner === loggedInUser && <>
+                                {reviewObj.owner === loggedInUser.username && <>
                                 
                                 <EditReviewsButton reviewObj={reviewObj} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} setReviewEditError={setReviewEditError}/>
                                  {/* <span className={styles['edit-button']} onClick={() => { setEdittingReview(currObj => {
@@ -201,7 +211,13 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                
                                 <span onClick={() => {
                                     if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
-                                        deleteReview(reviewObj.review_id);
+                                        deleteReview(reviewObj.review_id).catch(e => {
+                                            setErr({
+                                statusCode : e.response ? e.response.status : '',
+                                                
+                                                msg : 'There was a problem deleting your message, please try again'
+                                            });
+                                        })
                                         setReviewsList(currReviews => {
                                             const newReviews = currReviews.map(review => { return { ...review } });
                                             const deletedIndex = newReviews.findIndex(review => review.review_id === reviewObj.review_id);

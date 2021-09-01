@@ -4,7 +4,7 @@ import styles from '../CSS/Reviews.module.css'
 import { useState } from 'react';
 
 
-export default function EditReviewsForm({setReviewEditError, setEdittingReview, setReviewsList, reviewEditError, reviewObj, newReviewInput, setNewReviewInput, setReview}) {
+export default function EditReviewsForm({setErr, setReviewEditError, setEdittingReview, setReviewsList, reviewEditError, reviewObj, newReviewInput, setNewReviewInput, setReview}) {
     return (
             
             <form onSubmit={event => {
@@ -13,7 +13,12 @@ export default function EditReviewsForm({setReviewEditError, setEdittingReview, 
                                             setReviewEditError(true);
                                         } else {
                                             //patch review
-                                            patchReview(reviewObj.review_id, newReviewInput);
+                                            patchReview(reviewObj.review_id, newReviewInput).catch(e => {
+                                                setErr({
+                                                    statusCode : e.response.status,
+                                                    msg : 'There was a problem, please try again'
+                                                });
+                                            });
                                             setReviewEditError(false);
                                             setEdittingReview({edittingReview : false, reviewToEdit : ''});
                                             if(setReviewsList) {

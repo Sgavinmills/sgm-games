@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import styles from './CSS/AddReview.module.css'
 import { postComment } from '../API-Funcs/API';
+import Error from './Error';
 
 
-export default function AddComment({ loggedInUser, review_id, setCommentsList, setPostingComment }) {
+export default function AddComment({ setTotalItems, loggedInUser, review_id, setCommentsList, setPostingComment }) {
     const [postData, setPostData] = useState({
-        username: loggedInUser,
+        username: loggedInUser.username,
         body: '',
     });
-
+    const [err, setErr] = useState(null);
     const [bodyError, setBodyError] = useState(false);
+
+
+    if(err) return <Error err={err} setErr={setErr} />
 
     return (
         <div>
@@ -21,6 +25,7 @@ export default function AddComment({ loggedInUser, review_id, setCommentsList, s
                 <form className={styles['add-review-form']} onSubmit={(event) => {
                     event.preventDefault();
                     if(postData.body.length >= 20 && postData.body.length <= 2000) {
+                        setErr(null);
                         postComment(postData, review_id)
                             .then(response => {
                                 setCommentsList(currComments => {
@@ -28,12 +33,19 @@ export default function AddComment({ loggedInUser, review_id, setCommentsList, s
                                     newComments.push(response.comments);
                                     return newComments;
                                 })
+                            }).catch(e => {
+                                setErr({
+                                    statusCode : e.response.status,
+                                    msg : 'There was a problem, please try again'
+                                });
                             })
                         setPostData({
-                            owner: loggedInUser,
+                            owner: loggedInUser.username,
                             body: '',
                         })
                         setPostingComment(false);
+                        setTotalItems(currCount => currCount + 1)
+
                 } else {
                     if(postData.body.length < 20 || postData.body.length > 2000) {
                         setBodyError(true);

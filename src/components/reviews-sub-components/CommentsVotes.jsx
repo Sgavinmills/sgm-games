@@ -1,7 +1,7 @@
 import styles from '../CSS/Reviews.module.css'
 import { patchCommentVotes } from '../../API-Funcs/API';
 
-export default function CommentsVotes({likedComments, commentObj, loggedInUser, commentsList, setLikedComments, setCommentsList}) {
+export default function CommentsVotes({setErr, likedComments, commentObj, loggedInUser, commentsList, setLikedComments, setCommentsList}) {
     return (
         <div>
             <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeCommentVotes(commentObj.comment_id, 'down', loggedInUser) }}
@@ -64,7 +64,14 @@ export default function CommentsVotes({likedComments, commentObj, loggedInUser, 
                 })
             }
         }
-        patchCommentVotes(comment_id, vote_type, loggedInUser).catch(e => console.log(e.response))
+        patchCommentVotes(comment_id, vote_type, loggedInUser.username).catch(e => {
+            setErr({
+                statusCode : e.response ? e.response.status : '',
+                
+                msg : 'There was a problem, please try again'
+            });
+        })
+        
     }
     }
 

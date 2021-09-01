@@ -23,3 +23,15 @@
     
 }
 
+select {
+    margin: 0.5rem;
+}
+
+@media only screen and (max-width: 650px) {
+   .filter-container {
+       width: 80%;
+   }
+
+   
+}
+

@@ -115,7 +115,7 @@
     font-size: 2rem;
     padding: 1rem;
     position: relative;
-    left: 45%;
+    left: 40%;
 }
 
 .form-edit-body {
@@ -150,8 +150,6 @@ And still need to shrink text in the review box info bar*/
     
     .review-box, .comment-box {
         margin: 0rem 0 0 0;
-    
-                
     }
 
     .main-review-box {
@@ -159,3 +157,13 @@ And still need to shrink text in the review box info bar*/
         align-items: center;
     }
   }
+
+@media only screen and (max-width: 550px) {
+    .info-header {
+        font-size: 0.8rem;
+    }
+
+    .info-text {
+        font-size: 0.7rem;
+    }
+}

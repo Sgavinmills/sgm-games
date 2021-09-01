@@ -4,22 +4,34 @@ const reviewsAPI = axios.create({
     baseURL: "https://nc-games-scott.herokuapp.com/api/",
 });
 
+
+
 export const getReviews = async (filters) => {
     const response = await reviewsAPI.get('/reviews', {
-        params : {
-            p : filters.p,
-            sort_by : filters.sort_by,
-            limit : filters.limit,
-            category : filters.category,
-            minutes : filters.minutes,
-            hours : filters.hours,
-            days : filters.days,
-            months : filters.months,
-            order : filters.order,
+        params: {
+            p: filters.p,
+            sort_by: filters.sort_by,
+            limit: filters.limit,
+            category: filters.category,
+            minutes: filters.minutes,
+            hours: filters.hours,
+            days: filters.days,
+            months: filters.months,
+            order: filters.order,
         }
     });
     return response.data;
 
+}
+export const getCommentsByReviewId = async (review_id, filters) => {
+    const response = await reviewsAPI.get(`/reviews/${review_id}/comments`, {
+        params: {
+
+            p: filters.p,
+            limit: filters.limit
+        }
+    });
+    return response.data;
 }
 
 export const getReviewById = async (review_id) => {
@@ -34,18 +46,18 @@ export const getCategories = async () => {
 }
 
 export const patchVotes = async (review_id, vote_type, voted_by) => {
-    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { voted_by : voted_by, vote_type : vote_type });
+    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { voted_by: voted_by, vote_type: vote_type });
 }
 
 export const patchCommentVotes = async (comment_id, vote_type, voted_by) => {
-    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { voted_by : voted_by, vote_type : vote_type });
+    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { voted_by: voted_by, vote_type: vote_type });
 }
 
 export const patchReview = async (review_id, review_body) => {
-    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { review_body : review_body });
+    const response = await reviewsAPI.patch(`/reviews/${review_id}`, { review_body: review_body });
 }
 export const patchComment = async (comment_id, body) => {
-    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { body : body });
+    const response = await reviewsAPI.patch(`/comments/${comment_id}`, { body: body });
 }
 export const getLikedReviews = async (user) => {
     const response = await reviewsAPI.get(`/votes/${user}/reviews`);
@@ -74,7 +86,3 @@ export const deleteComment = async (comment_id) => {
     const response = await reviewsAPI.delete(`/comments/${comment_id}`);
 }
 
-export const getCommentsByReviewId = async (review_id) => {
-    const response = await reviewsAPI.get(`/reviews/${review_id}/comments`);
-    return response.data;
-}

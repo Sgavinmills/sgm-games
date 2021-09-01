@@ -1,7 +1,7 @@
 import styles from '../CSS/Reviews.module.css'
 import { patchVotes } from '../../API-Funcs/API';
 
-export default function ReviewsVotes({likedReviews, reviewObj, loggedInUser, setLikedReviews, reviewsList, setReviewsList, review, setReview}) {
+export default function ReviewsVotes({setErr, likedReviews, reviewObj, loggedInUser, setLikedReviews, reviewsList, setReviewsList, review, setReview}) {
     return (
         <>
             <span style={{ color: likedReviews.some(review => review.review_id === reviewObj.review_id) && likedReviews.find(review => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(reviewObj.review_id, 'down', loggedInUser) }}
@@ -92,7 +92,12 @@ export default function ReviewsVotes({likedReviews, reviewObj, loggedInUser, set
                 }
             }
             //when we do error handling prob need to move this up into the blocks above, so can revert the optimisitc rendering easier
-            patchVotes(review_id, vote_type, loggedInUser).catch()
+            patchVotes(review_id, vote_type, loggedInUser.username).catch(e => {
+                setErr({
+                    statusCode : e.response ? e.response.status : '',
+                    msg : 'Something went wrong please try again'
+                })
+            })
         }
     }
 }

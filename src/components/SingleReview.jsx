@@ -5,6 +5,8 @@ import styles from './CSS/Reviews.module.css'
 import { Redirect } from "react-router";
 import AddComment from './AddComment.jsx'
 import Loading from './Loading';
+
+import Error from './Error';
 import EditReviewsButton from "./reviews-sub-components/EditReviewsButton";
 import EditReviewsForm from './reviews-sub-components/EditReviewsForm';
 import EditCommentsButton from "./reviews-sub-components/EditCommentsButton";
@@ -17,47 +19,65 @@ import Pagination from "./reviews-sub-components/Pagination";
 
 
 
-export default function SingleReview({likedReviews, setLikedReviews, loggedInUser, isLoading, setIsLoading, setEdittingReview, setNewReviewInput, setReviewEditError, newReviewInput, reviewEditError, edittingReview, setNewCommentInput, newCommentInput, commentEditError, setCommentEditError, edittingComment, setEdittingComment}) {
+export default function SingleReview({ likedReviews, setLikedReviews, loggedInUser, isLoading, setIsLoading, setEdittingReview, setNewReviewInput, setReviewEditError, newReviewInput, reviewEditError, edittingReview, setNewCommentInput, newCommentInput, commentEditError, setCommentEditError, edittingComment, setEdittingComment }) {
     const [review, setReview] = useState({});
     const [commentsList, setCommentsList] = useState([]);
-    const  { review_id } = useParams();
-  const [likedComments, setLikedComments] = useState([]);
-  const [postingComment, setPostingComment] = useState(false);
- const [isLoadingComments, setIsLoadingComments] = useState(true);
+    const { review_id } = useParams();
+    const [err, setErr] = useState(null);
+    const [likedComments, setLikedComments] = useState([]);
+    const [postingComment, setPostingComment] = useState(false);
+    const [isLoadingComments, setIsLoadingComments] = useState(true);
 
- const [filters, setFilters] = useState({
-    p: 1,
-    limit: 10,
-});
+    const [filters, setFilters] = useState({
+        p: 1,
+        limit: 10,
+    });
 
-const [totalItems, setTotalItems] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
 
 
-console.log('singlereview page - ' + newCommentInput)
     useEffect(() => {
         setIsLoadingComments(true);
         setIsLoading(true);
+        setErr(null);
         getReviewById(review_id)
             .then((response) => {
+                console.log('worked')
                 setReview(response.reviews);
                 setIsLoading(false);
+            }).catch((e) => {
+                setErr({
+                    statusCode: 404,
+                    msg: 'Review not found'
+                });
             })
         getCommentsByReviewId(review_id, filters)
             .then((response) => {
                 setCommentsList(response.comments);
                 setIsLoadingComments(false);
                 setTotalItems(response.total_count);
-
+            }).catch((e) => {
+                setErr({
+                    statusCode: e.response.status,
+                    msg: 'Review not found'
+                });
             })
     }, [review_id, filters])
 
 
-  useEffect(() => {
-    getLikedComments(loggedInUser) 
-      .then(data => {
-        setLikedComments(data.comments);
-      })
-  }, [loggedInUser])
+    useEffect(() => {
+        getLikedComments(loggedInUser.username)
+            .then(data => {
+                setLikedComments(data.comments);
+            })
+    }, [loggedInUser])
+
+    useEffect(() => {
+        //update total count
+        //want to do it when comment list updates, but that will be a problem for a re-render. 
+    })
+
+
 
     // const changeVotes = (review_id, vote_type, loggedInUser) => {
     //     const theLikedReview = likedReviews.find(review => review.review_id === review_id);
@@ -77,7 +97,7 @@ console.log('singlereview page - ' + newCommentInput)
     //                 newReview.votes = vote_type === 'up' ? newReview.votes + 1 : newReview.votes - 1;
     //                 return newReview;
     //             })
-            
+
     //     } else {
     //         //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
     //         if (theLikedReview.vote_type === vote_type) {
@@ -109,7 +129,7 @@ console.log('singlereview page - ' + newCommentInput)
     //         }
     //     }
     //     patchVotes(review_id, vote_type, loggedInUser).catch()
-        
+
     // }
     // }
 
@@ -132,7 +152,7 @@ console.log('singlereview page - ' + newCommentInput)
     //                 commentToEdit.votes = vote_type === 'up' ? commentToEdit.votes + 1 : commentToEdit.votes - 1;
     //                 return newComments;
     //             })
-            
+
     //     } else {
     //         //if it is in the liked review list if the vote_Type in the liked review list matches the vote_Type then yoink it from the liked list
     //         if (theLikedComment.vote_type === vote_type) {
@@ -168,95 +188,104 @@ console.log('singlereview page - ' + newCommentInput)
     //     patchCommentVotes(comment_id, vote_type, loggedInUser).catch(e => console.log(e.response))
     // }
     // }
+    console.log(totalItems);
+    if (err) return <Error err={err} setErr={setErr} />
 
     if (isLoading) return <Loading />
-    
+
     return (
         <div>
             <div className={styles['reviews-container']}>
-                
-                    
-                        
-                            <div key={review.review_id} className={styles['review-box']}>
-                                <div className={styles['review-box-info-bar']}>
-                                    <ul className={styles['review-box-info-bar-list']}>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>Reviewed By</p>
-                                            <p className={styles['info-text']}><a href='#'>{review.owner}</a></p>
-                                        </li>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>Category</p>
-                                            <p className={styles['info-text']}><a href='#'>{review.category}</a></p>
-                                        </li>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>Date posted</p>
-                                            <p className={styles['info-text']}>{review.created_at}</p>
-                                        </li>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>Votes</p>
-                                            <p className={styles['info-text']}>
 
-                                            <ReviewsVotes reviewObj={review} loggedInUser={loggedInUser} likedReviews={likedReviews} review={review} setLikedReviews={setLikedReviews} setReview={setReview}   >
-                                                    {review.votes}
-                                                </ReviewsVotes>
 
-                                                {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(review.review_id, 'down', loggedInUser) }} */}
-                                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
-                                                {/* {review.votes} */}
-                                                {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(review.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
-                                            </p>
-                                        </li>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>Comments</p>
-                                            <p className={styles['info-text']}>{review.comment_count}</p>
-                                        </li>
-                                        <li className={styles['review-box-info-bar-list-item']}>
-                                            <div className={styles["add-comment-buttons-container"]}>
-                                               <span  onClick={() => { setPostingComment(currState => !currState) }} className={styles["add-comment-button"]}><i class="fas fa-plus create-and-top-buttons"></i></span>
-                                            </div>
-                                        </li>
 
-                                    </ul>
+                <div key={review.review_id} className={styles['review-box']}>
+                    <div className={styles['review-box-info-bar']}>
+                        <ul className={styles['review-box-info-bar-list']}>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <p className={styles['info-header']}>Reviewed By</p>
+                                <p className={styles['info-text']}><a href='#'>{review.owner}</a></p>
+                            </li>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <p className={styles['info-header']}>Category</p>
+                                <p className={styles['info-text']}><a href='#'>{review.category}</a></p>
+                            </li>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <p className={styles['info-header']}>Date posted</p>
+                                <p className={styles['info-text']}>{review.created_at}</p>
+                            </li>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <p className={styles['info-header']}>Votes</p>
+                                <p className={styles['info-text']}>
+
+                                    <ReviewsVotes setErr={setErr} reviewObj={review} loggedInUser={loggedInUser} likedReviews={likedReviews} review={review} setLikedReviews={setLikedReviews} setReview={setReview}   >
+                                        {review.votes}
+                                    </ReviewsVotes>
+
+                                    {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeVotes(review.review_id, 'down', loggedInUser) }} */}
+                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
+                                    {/* {review.votes} */}
+                                    {/* <span style={{ color: likedReviews.some(reviewObj => review.review_id === reviewObj.review_id) && likedReviews.find(reviewObj => review.review_id === reviewObj.review_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeVotes(review.review_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
+                                </p>
+                            </li>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <p className={styles['info-header']}>Comments</p>
+                                <p className={styles['info-text']}>{review.comment_count}</p>
+                            </li>
+                            <li className={styles['review-box-info-bar-list-item']}>
+                                <div className={styles["add-comment-buttons-container"]}>
+                                    <span onClick={() => { setPostingComment(currState => !currState) }} className={styles["add-comment-button"]}><i class="fas fa-plus create-and-top-buttons"></i></span>
                                 </div>
-                                <div className={styles['main-review-box']}>
-                                    <img className={styles['review-image']} alt="review" src="https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
-                                    <div className={styles['review-text']}>
-                                        <h3>{review.title}</h3>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div className={styles['main-review-box']}>
+                        <img className={styles['review-image']} alt="review" src="https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                        <div className={styles['review-text']}>
+                            <h3>{review.title} {review.designer ? ` - By  ${review.designer}` : ''}</h3>
 
 
-                                       { edittingReview.edittingReview && edittingReview.reviewToEdit === review.review_id ?
-                                       <EditReviewsForm newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={review} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReview={setReview} />
-                                        
+                            {edittingReview.edittingReview && edittingReview.reviewToEdit === review.review_id ?
+                                <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={review} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReview={setReview} />
 
-                                       : <p className={styles['review-body-paragraph l4']}>{review.review_body}</p> }
-                                    </div>
-                                </div>
-                                { review.owner === loggedInUser && <>
-                                <EditReviewsButton reviewObj={review} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} setReviewEditError={setReviewEditError}/>
-                                    
-                                    {/* <span className={styles['edit-button']}><i class="far fa-edit"></i></span> */}
-                                <span  onClick={() => { 
-                                    if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) { 
-                                        deleteReview(review.review_id);
-                                        //need to return to main page here....
-                                
-                                        // setReviewsList(currReviews => {
-                                        //       const newReviews = currReviews.map(review => { return { ...review } });
-                                        //       const deletedIndex = newReviews.findIndex(review => review.review_id === reviewObj.review_id);
-                                        //       newReviews.splice(deletedIndex, 1);
-                                        //       return newReviews;
-                                        // })
-                                    } }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
 
-                            </div>
-                        
-                    
-                    
-                
-                
+                                : <p className={styles['review-body-paragraph l4']}>{review.review_body}</p>}
+                        </div>
+                    </div>
+                    {review.owner === loggedInUser.username && <>
+                        <EditReviewsButton reviewObj={review} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} setReviewEditError={setReviewEditError} />
+
+                        {/* <span className={styles['edit-button']}><i class="far fa-edit"></i></span> */}
+                        <span onClick={() => {
+                            if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
+                                deleteReview(review.review_id).catch(e => {
+                                    setErr({
+                                statusCode : e.response ? e.response.status : '',
+                                msg : 'Something went wrong. Please try again'
+
+                                    })
+                                })
+                                //need to return to main page here....
+
+                                // setReviewsList(currReviews => {
+                                //       const newReviews = currReviews.map(review => { return { ...review } });
+                                //       const deletedIndex = newReviews.findIndex(review => review.review_id === reviewObj.review_id);
+                                //       newReviews.splice(deletedIndex, 1);
+                                //       return newReviews;
+                                // })
+                            }
+                        }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
+
+                </div>
+
+
+
+
+
             </div>
-            { isLoadingComments && <Loading /> }
-            { !postingComment ? <div className={styles['comments-container']}>
+            {isLoadingComments && <Loading />}
+            {!postingComment && totalItems > 0 ? <div className={styles['comments-container']}>
                 {
                     commentsList.map((commentObj) => {
                         return (
@@ -269,7 +298,7 @@ console.log('singlereview page - ' + newCommentInput)
                                             <p className={styles['info-text']}><a href='#'>{commentObj.comment_id}</a></p>
 
                                         </li>
-                                        
+
                                         <li className={styles['comment-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Date posted</p>
                                             <p className={styles['info-text']}>{commentObj.created_at}</p>
@@ -278,18 +307,18 @@ console.log('singlereview page - ' + newCommentInput)
                                             <p className={styles['info-header']}>Votes</p>
                                             <p className={styles['info-text']}>
 
-                                            <CommentsVotes likedComments={likedComments} commentObj={commentObj} loggedInUser={loggedInUser} commentsList={commentsList} setLikedComments={setLikedComments} setCommentsList={setCommentsList} >
-                                                {commentObj.votes}
-                                            </CommentsVotes>
+                                                <CommentsVotes setErr={setErr} likedComments={likedComments} commentObj={commentObj} loggedInUser={loggedInUser} commentsList={commentsList} setLikedComments={setLikedComments} setCommentsList={setCommentsList} >
+                                                    {commentObj.votes}
+                                                </CommentsVotes>
 
                                                 {/* <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeCommentVotes(commentObj.comment_id, 'down', loggedInUser) }} */}
-                                                    {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
+                                                {/* // className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span> */}
                                                 {/* {commentObj.votes} */}
                                                 {/* <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeCommentVotes(commentObj.comment_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span> */}
                                             </p>
                                         </li>
-                                        
-                                        
+
+
 
                                     </ul>
                                 </div>
@@ -298,43 +327,59 @@ console.log('singlereview page - ' + newCommentInput)
                                         <h3>{commentObj.title}</h3>
 
 
-                                       { edittingComment.edittingComment && edittingComment.commentToEdit === commentObj.comment_id ?
-                                       <EditCommentsForm newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} commentEditError={commentEditError} commentObj={commentObj} setCommentEditError={setCommentEditError} setEdittingComment={setEdittingComment} setCommentsList={setCommentsList} />
+                                        {edittingComment.edittingComment && edittingComment.commentToEdit === commentObj.comment_id ?
+                                            <EditCommentsForm setTotalItems={setTotalItems} setErr={setErr} newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} commentEditError={commentEditError} commentObj={commentObj} setCommentEditError={setCommentEditError} setEdittingComment={setEdittingComment} setCommentsList={setCommentsList} />
 
-                                        : <p className={styles['comments-body-paragraph l4']}>{commentObj.body}</p> }
+                                            : <p className={styles['comments-body-paragraph l4']}>{commentObj.body}</p>}
 
 
 
 
                                     </div>
                                 </div>
-                                
-                                { commentObj.author === loggedInUser && <>
+
+                                {commentObj.author === loggedInUser.username && <>
                                     <EditCommentsButton commentObj={commentObj} setEdittingComment={setEdittingComment} setNewCommentInput={setNewCommentInput} setCommentEditError={setCommentEditError} />
                                     {/* <span className={styles['edit-button']}><i class="far fa-edit"></i></span> */}
-                                
-                                <span  onClick={() => { 
-                                    if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) { 
-                                        setCommentsList(currComments => {
-                                              const newCommentss = currComments.map(comments => { return { ...comments } });
-                                              const deletedIndex = newCommentss.findIndex(comments => comments.comment_id === commentObj.comment_id);
-                                              newCommentss.splice(deletedIndex, 1);
-                                              return newCommentss;
-                                        })
-                                        deleteComment(commentObj.comment_id)
 
+                                    <span onClick={() => {
+                                        if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
+                                            setCommentsList(currComments => {
+                                                const newCommentss = currComments.map(comments => { return { ...comments } });
+                                                const deletedIndex = newCommentss.findIndex(comments => comments.comment_id === commentObj.comment_id);
+                                                newCommentss.splice(deletedIndex, 1);
+                                                return newCommentss;
+                                            })
+                                            deleteComment(commentObj.comment_id).catch(e => {
+                                                setErr({
+                                                    statusCode: e.response ? e.response.status : '',
 
-                                    } }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
+                                                    msg: 'There was a problem deleting your message, please try again'
+                                                });
+                                            })
+
+                                setTotalItems(currCount => currCount - 1)
+                                            
+
+                                        }
+                                    }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
 
                             </div>
                         )
                     })
-                    
+
                 }
-                
-            </div> : <AddComment loggedInUser={loggedInUser} review_id={review.review_id} setPostingComment={setPostingComment} setCommentsList={setCommentsList} /> }
-            <Pagination setFilters={setFilters} totalItems={totalItems} filters={filters} />
-                
+
+            </div> : <AddComment setTotalItems={setTotalItems} loggedInUser={loggedInUser} review_id={review.review_id} setPostingComment={setPostingComment} setCommentsList={setCommentsList} />}
+            {totalItems > 0 ? <Pagination setFilters={setFilters} totalItems={totalItems} filters={filters} /> :
+                // <div className={styles['comment-box']}>
+                //     <div className={styles['comment-box-info-bar']}>
+                //         No comments to display
+                //     </div>
+                // </div>
+                ''
+                }
+
         </div>
     )
 }

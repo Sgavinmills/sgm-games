@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# nc-games-scott, Northcoders project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Contents
+- [Background](#background)
+- [Technologies](#technologies)
+- [Set-up for local use](#setup)
+- [Back-end](#backend)
+- [Live version](#live)
 
-## Available Scripts
+<a name=background></a>
+## Background
 
-In the project directory, you can run:
+This react website was made to help consolidate my understanding of making a C.R.U.D application. It is a board-game review website where users can view existing reviews or add their own.
 
-### `npm start`
+All reviews can be commented on, voted on and if applicable deleted or editted.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The site is hosted on Netlify and is available to view [HERE].
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The source code can be viewed and downloaded from [github](https://github.com/Sgavinmills/sgm-games).
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<a name=technologies></a>
+## Technologies
 
-### `npm run build`
+- [ReactJS](https://reactjs.org/) ^17.0.2
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Dependencies:
+- [Axios](https://axios-http.com/docs/intro) ^0.21.1
+- [react-dom]() ^17.0.2
+- [react-router-dom]() ^5.2.0
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<a name=setup></a>
+## Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Follow these steps to download the project onto your own machine:
 
-### `npm run eject`
+- Clone the repo
+~~~
+git clone https://github.com/Sgavinmills/sgm-games.git
+~~~
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Navigate into the src directory
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Install all dependencies
+~~~
+npm install
+~~~
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Load the site on localhost with react
+~~~
+npm start
+~~~
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+After a few moments the site will start in a new browser tab. You will be logged in as user 'tickle222' by default. In future versions account switching may be enabled and this will be clearly indicated.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+<a name=backend></a>
+## Back-end
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The back-end was created as project during the back-end phase of Northcoders bootcamp. 
 
-### Making a Progressive Web App
+It is available to view on [github](https://github.com/Sgavinmills/nc-games-scott)
+A live version of the server can be seen on [heroku](https://nc-games-scott.herokuapp.com/api/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+ 
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<a name=live></a>
+## Live Version
+The live version of the application can be viewed [HERE]

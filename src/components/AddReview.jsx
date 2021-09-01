@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react'
 import styles from './CSS/AddReview.module.css'
 import { postReview } from '../API-Funcs/API';
+import { useHistory, withRouter } from "react-router-dom";
+import Error from './Error';
 
 export default function AddReview({ categories, loggedInUser }) {
     const [postData, setPostData] = useState({
         title: '',
         designer: '',
-        owner: loggedInUser,
+        owner: loggedInUser.username,
         review_body: '',
         category: '',
         review_img_url: '',
     });
-
+    const [err, setErr] = useState(null);
+    
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
-
-
+  
+    if(err) return <Error err={err} setErr={setErr} />
+ 
     return (
         <div>
             <section className={styles['form-container']}>
@@ -26,16 +30,25 @@ export default function AddReview({ categories, loggedInUser }) {
 
                 <form className={styles['add-review-form']} onSubmit={(event) => {
                     event.preventDefault();
+
                     if(postData.title.length > 0 && postData.review_body.length > 0 && categories.some(cat => cat.slug === postData.category)) {
-                        postReview(postData);
+                        setErr(null);
+                        postReview(postData).catch(e => {
+                            setErr({
+                                statusCode : e.response ? e.response.status : '',
+                                msg : 'There was a problem, please try again'
+                            });
+                        })
                         setPostData({
                             title: '',
                             designer: '',
-                            owner: loggedInUser,
+                            owner: loggedInUser.username,
                             review_body: '',
                             category: '',
                             review_img_url: '',
                         })
+                     
+                          
                 } else {
                     if(postData.title.length < 5) {
                         setTitleError(true);
@@ -48,7 +61,6 @@ export default function AddReview({ categories, loggedInUser }) {
                     }
 
                 }
-
                 }}>
                     <input value={postData.title} onChange={event => {setPostData(currPostData => {
                         const newPostData = { ...currPostData };
