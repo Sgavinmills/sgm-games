@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../CSS/Reviews.module.css'
 
-export default function EditReviewsButton({setEdittingReview, setNewReviewInput, setReviewEditError, reviewObj, review}) {
+export default function EditReviewsButton({setEdittingReview, setNewReviewInput, reviewObj}) {
     return (
         
             <span className={styles['edit-button']} onClick={() => { setEdittingReview(currObj => {
@@ -12,7 +12,6 @@ export default function EditReviewsButton({setEdittingReview, setNewReviewInput,
                                      return newEditObj;
                                  })
                                 setNewReviewInput(reviewObj.review_body);
-                                setReviewEditError(false);
 
                                 }}><i class="far fa-edit"></i>
             </span> 

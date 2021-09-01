@@ -11,12 +11,8 @@ import Error from './components/Error';
 
 function App() {
   const [newReviewInput, setNewReviewInput] = useState('');
-  const [reviewEditError, setReviewEditError] = useState([false]);
   const [edittingReview, setEdittingReview] = useState({ edittingReview: false, reviewToEdit: '' });
   const [err, setErr] = useState(null);
-  const [newCommentInput, setNewCommentInput] = useState('');
-  const [commentEditError, setCommentEditError] = useState([false]);
-  const [edittingComment, setEdittingComment] = useState({ edittingComment: false, commentToEdit: '' });
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
@@ -64,11 +60,9 @@ function App() {
     <div className="App">
       <Header />
       <Switch>
-        <Route exact path="/">
-          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} setReviewEditError={setReviewEditError} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
-        </Route>
+      
         <Route exact path="/reviews">
-          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} setReviewEditError={setReviewEditError} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
+          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
         <Route exact path="/addreview">
           <AddReview categories={categories} loggedInUser={loggedInUser} />
@@ -78,11 +72,11 @@ function App() {
         </Route>
 
         <Route exact path="/review/:review_id">
-          <SingleReview setErr={setErr} edittingComment={edittingComment} setEdittingComment={setEdittingComment} commentEditError={commentEditError} setCommentEditError={setCommentEditError} newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} setReviewEditError={setReviewEditError} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
+          <SingleReview setErr={setErr}  newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
 
         <Route path="/">
-          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} setReviewEditError={setReviewEditError} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
+          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
 
       </Switch>

@@ -6,7 +6,7 @@ import { deepCopyObj } from '../utils/utils.js'
 
 
 
-export default function EditCommentsForm({ setTotalItems, setErr, setCommentEditError, setEdittingComment, setCommentsList, commentEditError, commentObj, newCommentInput, setNewCommentInput, setComment }) {
+export default function EditCommentsForm({ setTotalItems, setErr, setEdittingComment, setCommentsList, commentObj, newCommentInput, setNewCommentInput}) {
     const [formErrors, setFormErrors] = useState({
         commentBody: {
             msg: 'Comment body must be between 20-2000 chars',

@@ -1,6 +1,6 @@
 import styles from '../CSS/Reviews.module.css'
 
-export default function EditReviewsButton({setEdittingComment, setNewCommentInput, setCommentEditError, commentObj}) {
+export default function EditReviewsButton({setEdittingComment, setNewCommentInput, commentObj}) {
     return (
         
             <span className={styles['edit-button']} onClick={() => { setEdittingComment(currObj => {
@@ -10,7 +10,6 @@ export default function EditReviewsButton({setEdittingComment, setNewCommentInpu
                                      return newEditObj;
                                  })
                                 setNewCommentInput(commentObj.body);
-                                setCommentEditError(false);
 
                                 }}><i class="far fa-edit"></i>
             </span> 

@@ -19,7 +19,7 @@ import Pagination from "./reviews-sub-components/Pagination";
 
 
 
-export default function SingleReview({ likedReviews, setLikedReviews, loggedInUser, isLoading, setIsLoading, setEdittingReview, setNewReviewInput, setReviewEditError, newReviewInput, reviewEditError, edittingReview, setNewCommentInput, newCommentInput, commentEditError, setCommentEditError, edittingComment, setEdittingComment }) {
+export default function SingleReview({ likedReviews, setLikedReviews, loggedInUser, isLoading, setIsLoading, setEdittingReview, setNewReviewInput, newReviewInput, edittingReview}) {
     const [review, setReview] = useState({});
     const [commentsList, setCommentsList] = useState([]);
     const { review_id } = useParams();
@@ -27,16 +27,18 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
     const [likedComments, setLikedComments] = useState([]);
     const [postingComment, setPostingComment] = useState(false);
     const [isLoadingComments, setIsLoadingComments] = useState(true);
+    const [newCommentInput, setNewCommentInput] = useState('');
+    const [edittingComment, setEdittingComment] = useState({ edittingComment: false, commentToEdit: '' });
     const [filters, setFilters] = useState({
         p: 1,
         limit: 10,
     });
     const [totalItems, setTotalItems] = useState(0);
-    let history = useHistory();
-
     const returnToHomePage = () => {
         history.push('/reviews');
     }
+    let history = useHistory();
+
     useEffect(() => {
         setIsLoadingComments(true);
         setIsLoading(true);
@@ -112,16 +114,16 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                         </ul>
                     </div>
                     <div className={styles['main-review-box']}>
-                        <img className={styles['review-image']} alt="review" src="https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                        <img className={styles['review-image']} alt="review" src={review.review_img_url} />
                         <div className={styles['review-text']}>
                             <h3>{review.title} {review.designer ? ` - By  ${review.designer}` : ''}</h3>
                             {edittingReview.edittingReview && edittingReview.reviewToEdit === review.review_id ?
-                                <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={review} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReview={setReview} />
+                                <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewObj={review} setEdittingReview={setEdittingReview} setReview={setReview} />
                                 : <p className={styles['review-body-paragraph l4']}>{review.review_body}</p>}
                         </div>
                     </div>
                     {review.owner === loggedInUser.username && <>
-                        <EditReviewsButton reviewObj={review} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} setReviewEditError={setReviewEditError} />
+                        <EditReviewsButton reviewObj={review} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} />
                         <span onClick={() => {
                             if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
                                 deleteReview(review.review_id).catch(e => {
@@ -171,13 +173,13 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                     <div className={styles['comments-text']}>
                                         <h3>{commentObj.title}</h3>
                                         {edittingComment.edittingComment && edittingComment.commentToEdit === commentObj.comment_id ?
-                                            <EditCommentsForm setTotalItems={setTotalItems} setErr={setErr} newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} commentEditError={commentEditError} commentObj={commentObj} setCommentEditError={setCommentEditError} setEdittingComment={setEdittingComment} setCommentsList={setCommentsList} />
+                                            <EditCommentsForm setTotalItems={setTotalItems} setErr={setErr} newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} commentObj={commentObj} setEdittingComment={setEdittingComment} setCommentsList={setCommentsList} />
                                             : <p className={styles['comments-body-paragraph l4']}>{commentObj.body}</p>}
                                     </div>
                                 </div>
 
                                 {commentObj.author === loggedInUser.username && <>
-                                    <EditCommentsButton commentObj={commentObj} setEdittingComment={setEdittingComment} setNewCommentInput={setNewCommentInput} setCommentEditError={setCommentEditError} />
+                                    <EditCommentsButton commentObj={commentObj} setEdittingComment={setEdittingComment} setNewCommentInput={setNewCommentInput}/>
                                     <span onClick={() => {
                                         if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
                                             setCommentsList(currComments => {

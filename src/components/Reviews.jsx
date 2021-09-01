@@ -11,7 +11,7 @@ import ReviewsVotes from './reviews-sub-components/ReviewsVotes';
 import Error from './Error';
 
 
-export default function Reviews({ isLoading, setIsLoading, categories, loggedInUser, likedReviews, setLikedReviews, newReviewInput, setNewReviewInput, reviewEditError, setReviewEditError, edittingReview, setEdittingReview  }) {
+export default function Reviews({ isLoading, setIsLoading, categories, loggedInUser, likedReviews, setLikedReviews, newReviewInput, setNewReviewInput, edittingReview, setEdittingReview  }) {
 
     const [reviewsList, setReviewsList] = useState([]);
     const [err, setErr] = useState(null);
@@ -89,14 +89,14 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                     <div className={styles['review-text']}>
                                         <h3>{reviewObj.title}</h3>
                                        { edittingReview.edittingReview && edittingReview.reviewToEdit === reviewObj.review_id ?
-                                             <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewEditError={reviewEditError} reviewObj={reviewObj} setReviewEditError={setReviewEditError} setEdittingReview={setEdittingReview} setReviewsList={setReviewsList} />
+                                             <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewObj={reviewObj} setEdittingReview={setEdittingReview} setReviewsList={setReviewsList} />
                                       : <p className={styles['review-body-paragraph l4']}>{reviewObj.review_body}</p> 
                                        } 
                                     </div>
                                 </div>
 
                                 {reviewObj.owner === loggedInUser.username && <>
-                                <EditReviewsButton reviewObj={reviewObj} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} setReviewEditError={setReviewEditError}/>
+                                <EditReviewsButton reviewObj={reviewObj} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} />
                                 <span onClick={() => {
                                     if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
                                         deleteReview(reviewObj.review_id).catch(e => {

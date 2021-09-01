@@ -4,7 +4,7 @@ import styles from '../CSS/Reviews.module.css'
 import { useState } from 'react';
 import { deepCopyObj } from '../utils/utils.js'
 
-export default function EditReviewsForm({ setErr, setReviewEditError, setEdittingReview, setReviewsList, reviewEditError, reviewObj, newReviewInput, setNewReviewInput, setReview }) {
+export default function EditReviewsForm({ setErr, setEdittingReview, setReviewsList, reviewObj, newReviewInput, setNewReviewInput, setReview }) {
 
     const [formErrors, setFormErrors] = useState({
         reviewBody: {
