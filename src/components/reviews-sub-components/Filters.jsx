@@ -75,6 +75,9 @@ export default function Filters({ setFilters, categories}) {
                                     newFilter.sort_by = 'created_at';
                                     newFilter.order = 'asc';
                                     break;
+                                default:
+                                    newFilter.sort_by = null;
+                                    newFilter.order = null;
                             }
                             newFilter.p = 1;
                             return newFilter;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { patchReview, getReviewById, getReviews, patchVotes, getLikedReviews, deleteReview } from '../API-Funcs/API';
+import { getReviews, deleteReview } from '../API-Funcs/API';
 import styles from './CSS/Reviews.module.css'
 import Filters from './reviews-sub-components/Filters';
 import Pagination from './reviews-sub-components/Pagination';
@@ -41,7 +41,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                     msg : 'There was a problem, please try again'
                 });
             })
-    }, [filters])
+    }, [filters, setIsLoading])
 
 
     if(err) return <Error err={err} setErr={setErr} />
@@ -57,11 +57,11 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                     <ul className={styles['review-box-info-bar-list']}>
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Reviewed By</p>
-                                            <p className={styles['info-text']}><a href='#'>{reviewObj.owner}</a></p>
+                                            <p className={styles['info-text']}>{reviewObj.owner}</p>
                                         </li>
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Category</p>
-                                            <p className={styles['info-text']}><a href='#'>{reviewObj.category}</a></p>
+                                            <p className={styles['info-text']}>{reviewObj.category}</p>
                                         </li>
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Date posted</p>

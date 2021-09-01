@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
-import { patchVotes, getReviewById, getCommentsByReviewId, deleteReview, getLikedComments, deleteComment, patchCommentVotes } from "../API-Funcs/API";
+import { getReviewById, getCommentsByReviewId, deleteReview, getLikedComments, deleteComment } from "../API-Funcs/API";
 import styles from './CSS/Reviews.module.css'
-import { Redirect } from "react-router";
 import AddComment from './AddComment.jsx'
 import Loading from './Loading';
 import { useHistory } from 'react-router';
@@ -63,7 +62,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                     msg: 'Review not found'
                 });
             })
-    }, [review_id, filters])
+    }, [review_id, filters, setIsLoading])
 
     useEffect(() => {
         getLikedComments(loggedInUser.username)
@@ -82,11 +81,11 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                         <ul className={styles['review-box-info-bar-list']}>
                             <li className={styles['review-box-info-bar-list-item']}>
                                 <p className={styles['info-header']}>Reviewed By</p>
-                                <p className={styles['info-text']}><a href='#'>{review.owner}</a></p>
+                                <p className={styles['info-text']}>{review.owner}</p>
                             </li>
                             <li className={styles['review-box-info-bar-list-item']}>
                                 <p className={styles['info-header']}>Category</p>
-                                <p className={styles['info-text']}><a href='#'>{review.category}</a></p>
+                                <p className={styles['info-text']}>{review.category}</p>
                             </li>
                             <li className={styles['review-box-info-bar-list-item']}>
                                 <p className={styles['info-header']}>Date posted</p>
@@ -147,8 +146,8 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                     <ul className={styles['comment-box-info-bar-list']}>
                                         <li className={styles['comment-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>commented By</p>
-                                            <p className={styles['info-text']}><a href='#'>{commentObj.author}</a></p>
-                                            <p className={styles['info-text']}><a href='#'>{commentObj.comment_id}</a></p>
+                                            <p className={styles['info-text']}>{commentObj.author}</p>
+                                            <p className={styles['info-text']}>{commentObj.comment_id}</p>
 
                                         </li>
 

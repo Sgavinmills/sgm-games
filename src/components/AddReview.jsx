@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import styles from './CSS/AddReview.module.css'
 import { postReview } from '../API-Funcs/API';
 import Error from './Error';
