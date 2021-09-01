@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import styles from './CSS/AddReview.module.css'
 import { postReview } from '../API-Funcs/API';
-import { useHistory, withRouter } from "react-router-dom";
 import Error from './Error';
+import { useHistory } from 'react-router';
 
 export default function AddReview({ categories, loggedInUser }) {
     const [postData, setPostData] = useState({
@@ -14,13 +14,16 @@ export default function AddReview({ categories, loggedInUser }) {
         review_img_url: '',
     });
     const [err, setErr] = useState(null);
-    
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
-  
+    let history = useHistory();
+
+    const returnToHomePage = () => {
+        history.push('/reviews');
+    }
+
     if(err) return <Error err={err} setErr={setErr} />
- 
     return (
         <div>
             <section className={styles['form-container']}>
@@ -33,7 +36,9 @@ export default function AddReview({ categories, loggedInUser }) {
 
                     if(postData.title.length > 0 && postData.review_body.length > 0 && categories.some(cat => cat.slug === postData.category)) {
                         setErr(null);
-                        postReview(postData).catch(e => {
+                        postReview(postData).then(() => {
+                            returnToHomePage();
+                        }).catch(e => {
                             setErr({
                                 statusCode : e.response ? e.response.status : '',
                                 msg : 'There was a problem, please try again'
@@ -47,8 +52,6 @@ export default function AddReview({ categories, loggedInUser }) {
                             category: '',
                             review_img_url: '',
                         })
-                     
-                          
                 } else {
                     if(postData.title.length < 5) {
                         setTitleError(true);
@@ -59,7 +62,6 @@ export default function AddReview({ categories, loggedInUser }) {
                     if(!categories.some(cat => cat.slug === postData.category)) {
                         setCategoryError(true);
                     }
-
                 }
                 }}>
                     <input value={postData.title} onChange={event => {setPostData(currPostData => {
@@ -89,12 +91,9 @@ export default function AddReview({ categories, loggedInUser }) {
                         newPostData.review_body = event.target.value;
                         if(newPostData.review_body.length >= 20 && newPostData.review_body.length < 2000) {
                             setBodyError(false);
-    
                         }
                         return newPostData;
                     })
-                   
-
                 }
                 } className={styles["review-body"]} onBlur={event => {
                         if(postData.review_body.length < 20 || postData.review_body.length > 2000) {

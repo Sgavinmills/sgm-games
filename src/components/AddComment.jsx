@@ -12,9 +12,7 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
     const [err, setErr] = useState(null);
     const [bodyError, setBodyError] = useState(false);
 
-
-    if(err) return <Error err={err} setErr={setErr} />
-
+    if (err) return <Error err={err} setErr={setErr} />
     return (
         <div>
             <section className={styles['form-container']}>
@@ -24,19 +22,19 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
 
                 <form className={styles['add-review-form']} onSubmit={(event) => {
                     event.preventDefault();
-                    if(postData.body.length >= 20 && postData.body.length <= 2000) {
+                    if (postData.body.length >= 20 && postData.body.length <= 2000) {
                         setErr(null);
                         postComment(postData, review_id)
                             .then(response => {
                                 setCommentsList(currComments => {
-                                    const newComments = currComments.map(commentObj => { return {...commentObj}})
+                                    const newComments = currComments.map(commentObj => { return { ...commentObj } })
                                     newComments.push(response.comments);
                                     return newComments;
                                 })
                             }).catch(e => {
                                 setErr({
-                                    statusCode : e.response.status,
-                                    msg : 'There was a problem, please try again'
+                                    statusCode: e.response.status,
+                                    msg: 'There was a problem, please try again'
                                 });
                             })
                         setPostData({
@@ -45,41 +43,33 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
                         })
                         setPostingComment(false);
                         setTotalItems(currCount => currCount + 1)
-
-                } else {
-                    if(postData.body.length < 20 || postData.body.length > 2000) {
-                        setBodyError(true);
+                    } else {
+                        if (postData.body.length < 20 || postData.body.length > 2000) {
+                            setBodyError(true);
+                        }
                     }
-
-                }
-
                 }}>
 
-                    <input value={postData.body} onChange={event => { setPostData(currPostData => {
-                        const newPostData = { ...currPostData };
-                        newPostData.body = event.target.value;
-                        if(newPostData.body.length >= 20 && newPostData.body.length < 2000) {
-                            setBodyError(false);
-    
-                        }
-                        return newPostData;
-                    })
-                   
+                    <input value={postData.body} onChange={event => {
+                        setPostData(currPostData => {
+                            const newPostData = { ...currPostData };
+                            newPostData.body = event.target.value;
+                            if (newPostData.body.length >= 20 && newPostData.body.length < 2000) {
+                                setBodyError(false);
 
-                }
-                } className={styles["review-body"]} onBlur={event => {
-                        if(postData.body.length < 20 || postData.body.length > 2000) {
+                            }
+                            return newPostData;
+                        })
+                    }
+                    } className={styles["review-body"]} onBlur={event => {
+                        if (postData.body.length < 20 || postData.body.length > 2000) {
                             setBodyError(true);
                         } else setBodyError(false);
                     }} type="text" id="title" name="title" placeholder="Enter comment here.... 2000 words max" />
-                    { bodyError && <p className={styles['error-paragraph']}>Comment must be between 20 and 2000 characters</p>}
-
+                    {bodyError && <p className={styles['error-paragraph']}>Comment must be between 20 and 2000 characters</p>}
 
                     <div className={styles["final-options"]}>
-                       
-                        <input type="submit" value="Post comment" /> 
-                   
-
+                        <input type="submit" value="Post comment" />
                     </div>
                 </form>
             </section>

@@ -67,7 +67,6 @@ export default function CommentsVotes({setErr, likedComments, commentObj, logged
         patchCommentVotes(comment_id, vote_type, loggedInUser.username).catch(e => {
             setErr({
                 statusCode : e.response ? e.response.status : '',
-                
                 msg : 'There was a problem, please try again'
             });
         })

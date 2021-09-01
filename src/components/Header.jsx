@@ -11,7 +11,7 @@ export default function Header() {
                 <nav className={styles['nav-bar-large-container']}>
                     <ul className={styles['nav-bar-list']}>
                     <Link className={styles.link} to="/reviews"><li>Reviews</li></Link>
-                    <Link className={styles.link} to="/categories"><li>Categories</li></Link>
+                    {/* <Link className={styles.link} to="/categories"><li>Categories</li></Link> */}
                     <Link className={styles.link} to="/users"><li>Users</li></Link>
                     <Link className={styles.link} to="/profile"> <li>Profile</li></Link>
                     </ul>

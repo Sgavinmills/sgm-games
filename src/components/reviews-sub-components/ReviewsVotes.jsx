@@ -91,7 +91,6 @@ export default function ReviewsVotes({setErr, likedReviews, reviewObj, loggedInU
                     }
                 }
             }
-            //when we do error handling prob need to move this up into the blocks above, so can revert the optimisitc rendering easier
             patchVotes(review_id, vote_type, loggedInUser.username).catch(e => {
                 setErr({
                     statusCode : e.response ? e.response.status : '',

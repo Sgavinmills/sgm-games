@@ -5,10 +5,7 @@ import { useState } from 'react';
 
 
 export default function EditCommentsForm({setTotalItems, setErr, setCommentEditError, setEdittingComment, setCommentsList, commentEditError, commentObj, newCommentInput, setNewCommentInput, setComment}) {
-    console.log(commentEditError);
-
     return (
-            
             <form onSubmit={event => {
                                         event.preventDefault();
                                         if(newCommentInput.length < 20 || newCommentInput.length > 2000) {
