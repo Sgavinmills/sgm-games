@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from './CSS/AddReview.module.css'
 import { postComment } from '../API-Funcs/API';
 import Error from './Error';
+import { deepCopyObj } from './utils/utils.js'
 
 
 export default function AddComment({ setTotalItems, loggedInUser, review_id, setCommentsList, setPostingComment }) {
@@ -10,9 +11,65 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
         body: '',
     });
     const [err, setErr] = useState(null);
-    const [bodyError, setBodyError] = useState(false);
+
+    const [formErrors, setFormErrors] = useState({
+        commentBody: {
+            msg: ' ',
+            error: true,
+            checkValid: validateBody
+        }
+    });
+    function validateBody(body) {
+        if (body.length < 20 || body.length > 2000) {
+            setFormErrors(currErrors => {
+                const newErrors = deepCopyObj(currErrors);
+                newErrors.commentBody.error = true;
+                newErrors.commentBody.msg = 'Comment body must be between 20-2000 chars'
+                return newErrors;
+            })
+        } else setFormErrors(currErrors => {
+            const newErrors = deepCopyObj(currErrors);
+            newErrors.commentBody.error = false;
+            return newErrors;
+        })
+    }
+
+    function checkFormErrors() {
+        validateBody(postData.body);
+        for (const property in formErrors) {
+            if (formErrors[property].error) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function submitForm() {
+        setErr(null);
+        postComment(postData, review_id)
+            .then(response => {
+                setCommentsList(currComments => {
+                    const newComments = currComments.map(commentObj => { return { ...commentObj } })
+                    newComments.push(response.comments);
+                    return newComments;
+                })
+            }).catch(e => {
+                setErr({
+                    statusCode: e.response.status,
+                    msg: 'There was a problem, please try again'
+                });
+            })
+        setPostData({
+            owner: loggedInUser.username,
+            body: '',
+        })
+        setPostingComment(false);
+        setTotalItems(currCount => currCount + 1)
+    }
+
 
     if (err) return <Error err={err} setErr={setErr} />
+
     return (
         <div>
             <section className={styles['form-container']}>
@@ -22,51 +79,21 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
 
                 <form className={styles['add-review-form']} onSubmit={(event) => {
                     event.preventDefault();
-                    if (postData.body.length >= 20 && postData.body.length <= 2000) {
-                        setErr(null);
-                        postComment(postData, review_id)
-                            .then(response => {
-                                setCommentsList(currComments => {
-                                    const newComments = currComments.map(commentObj => { return { ...commentObj } })
-                                    newComments.push(response.comments);
-                                    return newComments;
-                                })
-                            }).catch(e => {
-                                setErr({
-                                    statusCode: e.response.status,
-                                    msg: 'There was a problem, please try again'
-                                });
-                            })
-                        setPostData({
-                            owner: loggedInUser.username,
-                            body: '',
-                        })
-                        setPostingComment(false);
-                        setTotalItems(currCount => currCount + 1)
-                    } else {
-                        if (postData.body.length < 20 || postData.body.length > 2000) {
-                            setBodyError(true);
-                        }
+                    if (!checkFormErrors()) {
+                        submitForm();
                     }
                 }}>
 
                     <input value={postData.body} onChange={event => {
+                        formErrors.commentBody.checkValid(event.target.value);
                         setPostData(currPostData => {
                             const newPostData = { ...currPostData };
                             newPostData.body = event.target.value;
-                            if (newPostData.body.length >= 20 && newPostData.body.length < 2000) {
-                                setBodyError(false);
-
-                            }
                             return newPostData;
                         })
-                    }
-                    } className={styles["review-body"]} onBlur={event => {
-                        if (postData.body.length < 20 || postData.body.length > 2000) {
-                            setBodyError(true);
-                        } else setBodyError(false);
-                    }} type="text" id="title" name="title" placeholder="Enter comment here.... 2000 words max" />
-                    {bodyError && <p className={styles['error-paragraph']}>Comment must be between 20 and 2000 characters</p>}
+                    }} className={styles["review-body"]} type="text" id="title" name="title" placeholder="Enter comment here.... 2000 words max" />
+                    {formErrors.commentBody.error && <p className={styles['error-paragraph']}>{formErrors.commentBody.msg}</p>}
+
 
                     <div className={styles["final-options"]}>
                         <input type="submit" value="Post comment" />
