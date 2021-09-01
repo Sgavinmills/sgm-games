@@ -2,7 +2,7 @@ import React from 'react'
 import { patchReview } from '../../API-Funcs/API';
 import styles from '../CSS/Reviews.module.css'
 import { useState } from 'react';
-
+import { deepCopyObj } from '../utils/utils.js'
 
 export default function EditReviewsForm({ setErr, setReviewEditError, setEdittingReview, setReviewsList, reviewEditError, reviewObj, newReviewInput, setNewReviewInput, setReview }) {
 
@@ -14,13 +14,7 @@ export default function EditReviewsForm({ setErr, setReviewEditError, setEdittin
         }
     });
 
-    function deepCopyObj(currObj) {
-        const newObj = {};
-        for(const property in currObj) {
-            newObj[property] = {...currObj[property]}
-        }
-        return newObj;
-    }
+  
 
     function validateBody(body) {
         if (body.length < 20 || body.length > 2000) {
@@ -30,7 +24,7 @@ export default function EditReviewsForm({ setErr, setReviewEditError, setEdittin
                 return newErrors;
             })
         } else setFormErrors(currErrors => {
-            const newErrors = { ...currErrors };
+            const newErrors = deepCopyObj(currErrors);
             newErrors.reviewBody.error = false;
             return newErrors;
         })
