@@ -72,8 +72,8 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
 
     return (
         <div>
-            <section className={styles['form-container']}>
-                <header className={styles['form-title-container']}>
+            <section className={styles['comment-form-container']}>
+                <header className={styles['comment-form-title-container']}>
                     <p className={styles['form-header-paragraph']}>Add a comment</p>
                 </header>
 
@@ -91,11 +91,11 @@ export default function AddComment({ setTotalItems, loggedInUser, review_id, set
                             newPostData.body = event.target.value;
                             return newPostData;
                         })
-                    }} className={styles["review-body"]} type="text" id="title" name="title" placeholder="Enter comment here.... 2000 words max" />
+                    }} className={styles["review-comment-body"]} type="text" id="title" name="title" placeholder="Enter comment here.... 2000 words max" />
                     {formErrors.commentBody.error && <p className={styles['error-paragraph']}>{formErrors.commentBody.msg}</p>}
 
 
-                    <div className={styles["final-options"]}>
+                    <div className={styles["final-options-comments"]}>
                         <input type="submit" value="Post comment" />
                     </div>
                 </form>

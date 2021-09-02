@@ -4,7 +4,6 @@ import styles from './CSS/Error.module.css'
 export default function Error({err, setErr}) {
     return (
         <div>
-            {/* <h1>{err.statusCode} {err.msg}</h1> */}
             <div className={styles['error-container']}>
                 
                     <h1>{err.statusCode}</h1>

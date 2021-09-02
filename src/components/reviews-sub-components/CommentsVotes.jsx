@@ -3,13 +3,13 @@ import { patchCommentVotes } from '../../API-Funcs/API';
 
 export default function CommentsVotes({setErr, likedComments, commentObj, loggedInUser, commentsList, setLikedComments, setCommentsList}) {
     return (
-        <div>
+        <p className={styles['info-text']}>
             <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'down' ? 'red' : '' }} onClick={() => { changeCommentVotes(commentObj.comment_id, 'down', loggedInUser) }}
                 className={styles['votes-thumbs']}><i className="far fa-thumbs-down"> </i> </span>
             {commentObj.votes}
             <span style={{ color: likedComments.some(comment => comment.comment_id === commentObj.comment_id) && likedComments.find(comment => comment.comment_id === commentObj.comment_id).vote_type === 'up' ? 'blue' : '' }} className={styles['votes-thumbs']} onClick={() => { changeCommentVotes(commentObj.comment_id, 'up', loggedInUser) }}> <i className="far fa-thumbs-up"></i></span>
 
-        </div>
+        </p>
     )
 
    function changeCommentVotes(comment_id, vote_type, loggedInUser){

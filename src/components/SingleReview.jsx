@@ -60,7 +60,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                 setTotalItems(response.total_count);
             }).catch((e) => {
                 setErr({
-                    statusCode: e.response.status,
+                    statusCode: e.response ? e.response.status : '',
                     msg: 'Review not found'
                 });
             })
@@ -81,7 +81,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                 <div key={review.review_id} className={styles['review-box']}>
                     <div className={styles['review-box-info-bar']}>
                         <ul className={styles['review-box-info-bar-list']}>
-                            <li className={styles['review-box-info-bar-list-item']}>
+                            <li className={`${styles['review-box-info-bar-list-item']} ${styles['list-item-date-posted']}`}>
                                 <p className={styles['info-header']}>Reviewed By</p>
                                 <p className={styles['info-text']}>{review.owner}</p>
                             </li>
@@ -89,7 +89,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                 <p className={styles['info-header']}>Category</p>
                                 <p className={styles['info-text']}>{review.category}</p>
                             </li>
-                            <li className={styles['review-box-info-bar-list-item']}>
+                            <li className={`${styles['review-box-info-bar-list-item']} ${styles['list-item-date-posted']}`}>
                                 <p className={styles['info-header']}>Date posted</p>
                                 <p className={styles['info-text']}>{review.created_at}</p>
                             </li>
@@ -107,7 +107,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                             </li>
                             <li className={styles['review-box-info-bar-list-item']}>
                                 <div className={styles["add-comment-buttons-container"]}>
-                                    <span onClick={() => { setPostingComment(currState => !currState) }} className={styles["add-comment-button"]}><i class="fas fa-plus create-and-top-buttons"></i></span>
+                                    <span onClick={() => { setPostingComment(currState => !currState) }} className={styles["add-comment-button"]}><i className="fas fa-plus create-and-top-buttons"></i></span>
                                 </div>
                             </li>
 
@@ -119,23 +119,28 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                             <h3>{review.title} {review.designer ? ` - By  ${review.designer}` : ''}</h3>
                             {edittingReview.edittingReview && edittingReview.reviewToEdit === review.review_id ?
                                 <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewObj={review} setEdittingReview={setEdittingReview} setReview={setReview} />
-                                : <p className={styles['review-body-paragraph l4']}>{review.review_body}</p>}
+                                :<> <p className={styles['review-body-paragraph']}>{review.review_body} </p> <p className={styles['extra-info-mobile']}>Reviewed by {review.owner} - {Date(review.created_at).substring(0, Date(review.created_at).length - 31)}</p></>}
                         </div>
                     </div>
                     {review.owner === loggedInUser.username && <>
                         <EditReviewsButton reviewObj={review} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} />
                         <span onClick={() => {
                             if (window.confirm('Are you sure you wish to delete this item? This action cannot be undone')) {
-                                deleteReview(review.review_id).catch(e => {
+                                deleteReview(review.review_id)
+                                .then(() => {
+                                    returnToHomePage();
+                                })
+                                .catch(e => {
                                     setErr({
                                         statusCode: e.response ? e.response.status : '',
                                         msg: 'Something went wrong. Please try again'
 
                                     })
                                 })
-                                returnToHomePage();
+                                
                             }
-                        }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
+                        }} className={styles['delete-button']}>  <i className="far fa-trash-alt"></i> </span>
+                         </>}
                 </div>
             </div>
             {isLoadingComments && <Loading />}
@@ -147,25 +152,24 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                 <div className={styles['comment-box-info-bar']}>
                                     <ul className={styles['comment-box-info-bar-list']}>
                                         <li className={styles['comment-box-info-bar-list-item']}>
-                                            <p className={styles['info-header']}>commented By</p>
+                                            <p className={styles['info-header']}>Commenter</p>
                                             <p className={styles['info-text']}>{commentObj.author}</p>
-                                            <p className={styles['info-text']}>{commentObj.comment_id}</p>
 
                                         </li>
 
                                         <li className={styles['comment-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Date posted</p>
-                                            <p className={styles['info-text']}>{commentObj.created_at}</p>
+                                            <p className={styles['info-text']}>{Date(commentObj.created_at).substring(0, Date(commentObj.created_at).length - 31)}</p>
                                         </li>
                                         <li className={styles['comment-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Votes</p>
-                                            <p className={styles['info-text']}>
+                                            {/* <p className={styles['info-text']}> */}
 
                                                 <CommentsVotes setErr={setErr} likedComments={likedComments} commentObj={commentObj} loggedInUser={loggedInUser} commentsList={commentsList} setLikedComments={setLikedComments} setCommentsList={setCommentsList} >
                                                     {commentObj.votes}
                                                 </CommentsVotes>
 
-                                            </p>
+                                            {/* </p> */}
                                         </li>
                                     </ul>
                                 </div>
@@ -174,7 +178,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                         <h3>{commentObj.title}</h3>
                                         {edittingComment.edittingComment && edittingComment.commentToEdit === commentObj.comment_id ?
                                             <EditCommentsForm setTotalItems={setTotalItems} setErr={setErr} newCommentInput={newCommentInput} setNewCommentInput={setNewCommentInput} commentObj={commentObj} setEdittingComment={setEdittingComment} setCommentsList={setCommentsList} />
-                                            : <p className={styles['comments-body-paragraph l4']}>{commentObj.body}</p>}
+                                            : <p className={styles['comments-body-paragraph']}>{commentObj.body}</p>}
                                     </div>
                                 </div>
 
@@ -197,7 +201,7 @@ export default function SingleReview({ likedReviews, setLikedReviews, loggedInUs
                                             })
                                             setTotalItems(currCount => currCount - 1)
                                         }
-                                    }} className={styles['delete-button']}>  <i class="far fa-trash-alt"></i> </span> </>}
+                                    }} className={styles['delete-button']}>  <i className="far fa-trash-alt"></i> </span> </>}
                             </div>
                         )
                     })

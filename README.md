@@ -14,7 +14,7 @@ This react website was made to help consolidate my understanding of making a C.R
 
 All reviews can be commented on, voted on and if applicable deleted or editted.
 
-The site is hosted on Netlify and is available to view [HERE].
+The site is hosted on Netlify and is available to view [here](https://sgm-games.netlify.app/reviews).
 
 The source code can be viewed and downloaded from [github](https://github.com/Sgavinmills/sgm-games).
 
@@ -23,11 +23,13 @@ The source code can be viewed and downloaded from [github](https://github.com/Sg
 ## Technologies
 
 - [ReactJS](https://reactjs.org/) ^17.0.2
+- [Node JS](https://nodejs.org/en/) v16.2.0
 
 ### Dependencies:
 - [Axios](https://axios-http.com/docs/intro) ^0.21.1
 - [react-dom]() ^17.0.2
 - [react-router-dom]() ^5.2.0
+
 
 <a name=setup></a>
 ## Setup
@@ -70,4 +72,4 @@ A live version of the server can be seen on [heroku](https://nc-games-scott.hero
 
 <a name=live></a>
 ## Live Version
-The live version of the application can be viewed [HERE]
+The live version of the application can be viewed [here](https://sgm-games.netlify.app/reviews)

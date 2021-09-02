@@ -46,9 +46,10 @@
 }
 
 .review-body-paragraph, .comments-body-paragraph {
-    font-size: 2rem;
+    font-size: 1.2rem;
     font-family: 'Work Sans', sans-serif;
 }
+
 
 
 .review-box-info-bar-list, .comment-box-info-bar-list {
@@ -131,6 +132,14 @@
 }
 
 
+.extra-info-mobile {
+    font-style: italic;
+    font-size: 1.1rem;
+    font-family: 'Work Sans', sans-serif;
+
+    display: none;
+}
+
 
 
 /*not finishing playing with these yet but works nicely.
@@ -159,11 +168,20 @@ And still need to shrink text in the review box info bar*/
   }
 
 @media only screen and (max-width: 550px) {
-    .info-header {
+    /* .info-header {
         font-size: 0.8rem;
     }
 
     .info-text {
         font-size: 0.7rem;
+    } */
+
+    .extra-info-mobile {
+        display: block;
+    }
+
+    .list-item-reviewed-by, .list-item-date-posted {
+        display: none;
+        color: red;
     }
 }

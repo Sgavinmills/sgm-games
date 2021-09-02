@@ -51,14 +51,14 @@ function App() {
 
   if (err) return (
     <div className="App">
-      <Header />
+      <Header loggedInUser={loggedInUser}/>
       <Error err={err} />
     </div>
   )
 
   return (
     <div className="App">
-      <Header />
+      <Header loggedInUser={loggedInUser}/>
       <Switch>
       
         <Route exact path="/reviews">
@@ -76,7 +76,7 @@ function App() {
         </Route>
 
         <Route path="/">
-          <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
+           <Error err={{statusCode : 404, msg : 'Route not found, please try again'}} setErr={setErr}/>
         </Route>
 
       </Switch>

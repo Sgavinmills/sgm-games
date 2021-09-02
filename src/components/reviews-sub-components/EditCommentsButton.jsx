@@ -11,7 +11,7 @@ export default function EditReviewsButton({setEdittingComment, setNewCommentInpu
                                  })
                                 setNewCommentInput(commentObj.body);
 
-                                }}><i class="far fa-edit"></i>
+                                }}><i className="far fa-edit"></i>
             </span> 
         
     )

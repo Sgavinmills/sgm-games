@@ -1,17 +1,19 @@
-.form-container {
+.form-container, .comment-form-container {
     background-color: rgba(244, 250, 244, 1);
-    width: 50%;
+
+    width: 60%;
     margin: 3rem auto;
     text-align: center;
     border-radius: 5px; 
     padding: 1rem;
 }
 
-.add-review-form > input, .add-review-form > select {
-    width: 80%;
-    margin: 2rem auto 0rem auto;
-    padding: 0; 
+.comment-form-container {
+    background-color: rgb(188, 190, 188);
+
 }
+
+
 
 .form-header-paragraph {
     font-family: 'Work Sans', sans-serif;
@@ -26,13 +28,23 @@ input {
     height: 30rem;
 }
 
-.form-title-container {
+.review-comment-body {
+    height: 10rem;
+    width: 100%;
+}
+
+.form-title-container, .comment-form-title-container {
     background-color: rgba(0, 68, 0, 0.3);  
-    width: 80%;
+    /* width: 80%; */
     margin: auto;
     border: 1px solid black;
     border-radius: 5px;
     margin-bottom: 1rem;
+}
+
+.comment-form-title-container {
+    background-color: rgba(0, 2, 90, 0.3);  
+
 }
 
 .final-options {
@@ -42,20 +54,61 @@ input {
     justify-content: space-between;
 }
 
+.final-options-comments {
+    padding: 0.4rem;
+    margin: 0.2rem;
+}
+
 .error-paragraph {
-    position: absolute; 
      margin: 0;
     padding: 0;
     left: 50%;
-    transform: translateX(-50%);
     color: red;
     text-align: center;
+}
+
+.add-review-form {
+    width: 80%;
+    margin: auto;
+}
+
+label {
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Work Sans', sans-serif;
+    width: 30%;
+}
+
+.label-input-container > input, .add-review-form > select {
+    width: 70%;
+    padding: 0; 
+}
+
+
+
+.label-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem auto;
 }
 
 @media only screen and (max-width: 1000px) {
     .form-container {
         width: 90%;
     }
- 
-  
  }
+
+ @media only screen and (max-width: 710px) {
+    .label-input-container {
+        flex-direction: column;
+    }
+    .label-input-container > input, .add-review-form > select {
+        width: 100%;
+        padding: 0; 
+    }
+    label {
+      
+        width: 100%;
+    }
+ }
+

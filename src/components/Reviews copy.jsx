@@ -10,7 +10,6 @@ import EditReviewsForm from './reviews-sub-components/EditReviewsForm';
 import ReviewsVotes from './reviews-sub-components/ReviewsVotes';
 import Error from './Error';
 import DeleteReviewButton from './reviews-sub-components/DeleteReviewButton';
-import { convertTime } from './utils/utils';
 
 
 export default function Reviews({ isLoading, setIsLoading, categories, loggedInUser, likedReviews, setLikedReviews, newReviewInput, setNewReviewInput, edittingReview, setEdittingReview  }) {
@@ -44,6 +43,8 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                 });
             })
     }, [filters, setIsLoading])
+
+
     if(err) return <Error err={err} setErr={setErr} />
     if (isLoading) return <Loading />
     return (
@@ -55,7 +56,7 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                             <div key={reviewObj.review_id} className={styles['review-box']}>
                                 <div className={styles['review-box-info-bar']}>
                                     <ul className={styles['review-box-info-bar-list']}>
-                                        <li className={`${styles['review-box-info-bar-list-item']} ${styles['list-item-date-posted']}`}>
+                                        <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Reviewed By</p>
                                             <p className={styles['info-text']}>{reviewObj.owner}</p>
                                         </li>
@@ -63,10 +64,9 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                             <p className={styles['info-header']}>Category</p>
                                             <p className={styles['info-text']}>{reviewObj.category}</p>
                                         </li>
-                                        <li className={`${styles['review-box-info-bar-list-item']} ${styles['list-item-date-posted']}`}>
+                                        <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Date posted</p>
-                                            <p className={styles['info-text']}>{ convertTime(reviewObj.created_at)}</p>
-
+                                            <p className={styles['info-text']}>{reviewObj.created_at}</p>
                                         </li>
                                         <li className={styles['review-box-info-bar-list-item']}>
                                             <p className={styles['info-header']}>Votes</p>
@@ -91,15 +91,17 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
                                         <h3>{reviewObj.title}</h3>
                                        { edittingReview.edittingReview && edittingReview.reviewToEdit === reviewObj.review_id ?
                                              <EditReviewsForm setErr={setErr} newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} reviewObj={reviewObj} setEdittingReview={setEdittingReview} setReviewsList={setReviewsList} />
-                                      : <><p className={styles['review-body-paragraph']}>{reviewObj.review_body}</p> <p className={styles['extra-info-mobile']}>Reviewed by {reviewObj.owner} - {Date(reviewObj.created_at).substring(0, Date(reviewObj.created_at).length - 31)}</p></>
+                                      : <p className={styles['review-body-paragraph l4']}>{reviewObj.review_body}</p> 
                                        } 
                                     </div>
                                 </div>
-                                        
-                                    {reviewObj.owner === loggedInUser.username && <>
-                                        <EditReviewsButton reviewObj={reviewObj} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} />
-                                        <DeleteReviewButton reviewObj={reviewObj} setReviewsList={setReviewsList} setErr={setErr}/>
-                                    </>}
+                                
+                                {reviewObj.owner === loggedInUser.username && <>
+                                <EditReviewsButton reviewObj={reviewObj} setEdittingReview={setEdittingReview} setNewReviewInput={setNewReviewInput} />
+                                <DeleteReviewButton reviewObj={reviewObj} setReviewsList={setReviewsList} setErr={setErr}/>
+                     
+                                </>}
+
                             </div>
                         )
                     })
@@ -107,9 +109,9 @@ export default function Reviews({ isLoading, setIsLoading, categories, loggedInU
 
             </div>
             <div className={styles["create-and-top-buttons-container"]}>
-                <Link className={styles.link} to="/addreview"> <span className={styles["add-review-button"]}><i className="fas fa-plus create-and-top-buttons"></i></span></Link>
+                <Link className={styles.link} to="/addreview"> <span className={styles["add-review-button"]}><i class="fas fa-plus create-and-top-buttons"></i></span></Link>
             </div>
-            <Filters categories={categories} setFilters={setFilters} filters={filters}/>
+            <Filters categories={categories} setFilters={setFilters} />
             <Pagination setFilters={setFilters} totalItems={totalItems} filters={filters} />
         </div>
     )

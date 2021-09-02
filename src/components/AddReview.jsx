@@ -143,10 +143,7 @@ export default function AddReview({ categories, loggedInUser }) {
         validateCategory(postData.category);
         validateBody(postData.review_body);
         for (const property in formErrors) {
-            console.log(formErrors[property].error)
-            console.log('hi');
             if (formErrors[property].error === true) {
-                console.log('hmm')
                 return true;
             }
         }
@@ -159,7 +156,6 @@ export default function AddReview({ categories, loggedInUser }) {
         history.push('/reviews');
     }
     function submitForm() {
-        console.log(postData);
         setErr(null);
         postReview(postData).then(() => {
             returnToHomePage();
@@ -186,30 +182,43 @@ export default function AddReview({ categories, loggedInUser }) {
                     <p className={styles['form-header-paragraph']}>Post a review</p>
                 </header>
 
-
-
                 <form className={styles['add-review-form']} onSubmit={(event) => {
                     event.preventDefault();
                     if(!checkFormErrors()) {
                         submitForm();
                    }
                 }}>
-                    <input value={postData.title} onChange={event => { validateTitle(event.target.value)  }}  
-                    type="text" name="title" placeholder="The title of the game you are going to review..." />
-                    { 
-                    formErrors.title.error && <p className={styles['error-paragraph']}>{formErrors.title.msg}</p>}
+                    <div className={styles["label-input-container"]}>
+                        <label for="title">Review title: </label> 
+                        <input id="title" value={postData.title} onChange={event => { validateTitle(event.target.value)  }}  
+                        type="text" name="title" placeholder="The title of the game you are going to review..." />
+                    </div>
+                    { formErrors.title.error && <p className={styles['error-paragraph']}>{formErrors.title.msg}</p>}
 
-                    <input value={postData.designer} onChange={event => {validateDesigner(event.target.value)}} 
-                    type="text" name="designer" placeholder="Game designer. Leave blank if you aren't sure :)" />
+                    <div className={styles["label-input-container"]}>
+                        <label for="designer">Game designer:</label>
+                        <input id="designer" value={postData.designer} onChange={event => {validateDesigner(event.target.value)}} 
+                        type="text" name="designer" placeholder="Game designer. Leave blank if you aren't sure :)" />
+                    </div>
                     { formErrors.designer.error && <p className={styles['error-paragraph']}>{formErrors.designer.msg}</p>}
 
-                    <input value={postData.reviewBody} onChange={event => {validateBody(event.target.value)}} 
-                    type="text" name="review_body" placeholder="Review body... 2000 words max. Make it fun." className={styles["review-body"]} />
+
+                    <div className={styles["label-input-container"]}>
+                        <label for="body">Your review:</label>
+                        <input id="body" value={postData.reviewBody} onChange={event => {validateBody(event.target.value)}} 
+                        type="text" name="review_body" placeholder="Review body... 2000 words max. Make it fun." className={styles["review-body"]} />
+                    </div>
                     { formErrors.reviewBody.error && <p className={styles['error-paragraph']}>{formErrors.reviewBody.msg}</p>}
-            
-                    <input value={postData.review_img_url} onChange={event => {validateImgUrl(event.target.value)}} 
-                    type="text" id="image_url" name="image_url" placeholder="Image url" />
+
+
+                    <div className={styles["label-input-container"]}>
+                        <label for="image">Image link:</label>
+                        <input id="image" value={postData.review_img_url} onChange={event => {validateImgUrl(event.target.value)}} 
+                        type="text" id="image_url" name="image_url" placeholder="Image url" />
+                        { formErrors.review_img_url.error && <p className={styles['error-paragraph']}>{formErrors.review_img_url.msg}</p>}
+                    </div>
                     { formErrors.review_img_url.error && <p className={styles['error-paragraph']}>{formErrors.review_img_url.msg}</p>}
+
 
                     <div className={styles["final-options"]}>
                         <select onChange={(event) => { validateCategory(event.target.value) }}> 

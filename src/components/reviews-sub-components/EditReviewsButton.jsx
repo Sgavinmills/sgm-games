@@ -5,7 +5,6 @@ export default function EditReviewsButton({setEdittingReview, setNewReviewInput,
     return (
         
             <span className={styles['edit-button']} onClick={() => { setEdittingReview(currObj => {
-                console.log('hi');
                                      const newEditObj = {...currObj};
                                      newEditObj.edittingReview = !newEditObj.edittingReview;
                                      newEditObj.reviewToEdit = reviewObj.review_id;
@@ -13,7 +12,7 @@ export default function EditReviewsButton({setEdittingReview, setNewReviewInput,
                                  })
                                 setNewReviewInput(reviewObj.review_body);
 
-                                }}><i class="far fa-edit"></i>
+                                }}><i className="far fa-edit"></i>
             </span> 
         
     )
