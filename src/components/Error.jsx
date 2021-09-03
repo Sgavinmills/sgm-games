@@ -5,7 +5,6 @@ export default function Error({err, setErr}) {
     return (
         <div>
             <div className={styles['error-container']}>
-                
                     <h1>{err.statusCode}</h1>
                     <h2>{err.msg}</h2>
                     <Link to="/reviews"> <button onClick={() => { setErr(null)}}>Main Page</button></Link>

@@ -47,8 +47,6 @@ function App() {
       })
   }, [loggedInUser])
 
-
-
   if (err) return (
     <div className="App">
       <Header loggedInUser={loggedInUser}/>
@@ -61,7 +59,7 @@ function App() {
       <Header loggedInUser={loggedInUser}/>
       <Switch>
       
-        <Route exact path="/reviews">
+        <Route exact path={["/reviews", "/", "/reviews/:categoryName"]}>
           <Reviews newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} categories={categories} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
         <Route exact path="/addreview">
@@ -75,7 +73,7 @@ function App() {
           <SingleReview setErr={setErr}  newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
 
-        <Route path="/">
+        <Route exact path="/*">
            <Error err={{statusCode : 404, msg : 'Route not found, please try again'}} setErr={setErr}/>
         </Route>
 
