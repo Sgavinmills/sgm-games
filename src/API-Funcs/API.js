@@ -40,8 +40,19 @@ export const getReviewById = async (review_id) => {
 
 }
 
+export const getUserByUsername = async (user) => {
+    const response = await reviewsAPI.get(`/users/${user}`);
+    return response.data;
+
+}
+
 export const getCategories = async () => {
     const response = await reviewsAPI.get(`/categories`);
+    return response.data;
+}
+
+export const getUsers = async () => {
+    const response = await reviewsAPI.get(`/users`);
     return response.data;
 }
 
@@ -62,6 +73,12 @@ export const patchComment = async (comment_id, body) => {
 export const getLikedReviews = async (user) => {
     const response = await reviewsAPI.get(`/votes/${user}/reviews`);
     return response.data;
+}
+
+export const getCommentedReviewsByUsername = async (user) => {
+    const response = await reviewsAPI.get(`/comments/${user}/reviews`);
+    return response.data;
+
 }
 
 export const getLikedComments = async (user) => {

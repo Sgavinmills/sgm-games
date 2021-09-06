@@ -6,7 +6,7 @@ export default function EditReviewsButton({
   commentObj,
 }) {
   return (
-    <span
+    <button
       className={styles["edit-button"]}
       onClick={() => {
         setEdittingComment((currObj) => {
@@ -19,6 +19,6 @@ export default function EditReviewsButton({
       }}
     >
       <i className="far fa-edit"></i>
-    </span>
+    </button>
   );
 }

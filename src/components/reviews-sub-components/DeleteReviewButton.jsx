@@ -8,7 +8,7 @@ export default function DeleteReviewButton({
   setErr,
 }) {
   return (
-    <span
+    <button
       onClick={() => {
         if (
           window.confirm(
@@ -37,6 +37,6 @@ export default function DeleteReviewButton({
     >
       {" "}
       <i className="far fa-trash-alt"></i>{" "}
-    </span>
+    </button>
   );
 }

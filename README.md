@@ -4,7 +4,6 @@
 - [Background](#background)
 - [Technologies](#technologies)
 - [Set-up for local use](#setup)
-- [Back-end](#backend)
 - [Live version](#live)
 
 <a name=background></a>
@@ -12,11 +11,15 @@
 
 This react website was made to help consolidate my understanding of making a C.R.U.D application. It is a board-game review website where users can view existing reviews or add their own.
 
-All reviews can be commented on, voted on and if applicable deleted or editted.
+All reviews can be commented on, voted on and if applicable deleted or editted. All reviews, comments and votes are stored in the database and will persist across refreshes and user switching.
 
 The site is hosted on Netlify and is available to view [here](https://sgm-games.netlify.app/reviews).
 
 The source code can be viewed and downloaded from [github](https://github.com/Sgavinmills/sgm-games).
+
+The backend server is hosted on [heroku](https://nc-games-scott.herokuapp.com/api/)
+
+The source code for backend can be viewed and downloaded from [github](https://github.com/Sgavinmills/nc-games-scott)
 
 
 <a name=technologies></a>
@@ -53,11 +56,7 @@ npm install
 npm start
 ~~~
 
-After a few moments the site will start in a new browser tab. You will be logged in as user 'tickle222' by default. In future versions account switching may be enabled and this will be clearly indicated.
-
-
-
-
+After a few moments the site will start in a new browser tab. You will be logged in as user 'tickle222' by default. As this is purely a demonstration project you can change the user by visitng the 'users' page and try adding reviews/comments with a different user. 
 
 
 <a name=backend></a>

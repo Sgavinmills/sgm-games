@@ -11,7 +11,6 @@ import styles from "./CSS/Reviews.module.css";
 import AddComment from "./AddComment.jsx";
 import Loading from "./Loading";
 import { useHistory } from "react-router";
-
 import Error from "./Error";
 import EditReviewsButton from "./reviews-sub-components/EditReviewsButton";
 import EditReviewsForm from "./reviews-sub-components/EditReviewsForm";
@@ -71,6 +70,7 @@ export default function SingleReview({
         setTotalItems(response.total_count);
       })
       .catch((e) => {
+        setIsLoadingComments(false);
         setErr({
           statusCode: e.response ? e.response.status : "",
           msg: e.response
@@ -90,9 +90,9 @@ export default function SingleReview({
   if (isLoading) return <Loading />;
   return (
     <div>
-      <div className={styles["reviews-container"]}>
+      <section className={styles["reviews-container"]}>
         <div key={review.review_id} className={styles["review-box"]}>
-          <div className={styles["review-box-info-bar"]}>
+          <header className={styles["review-box-info-bar"]}>
             <ul className={styles["review-box-info-bar-list"]}>
               <li
                 className={`${styles["review-box-info-bar-list-item"]} ${styles["list-item-date-posted"]}`}
@@ -104,10 +104,12 @@ export default function SingleReview({
                 <p className={styles["info-header"]}>Category</p>
                 <p className={styles["info-text"]}>{review.category}</p>
               </li>
+              
               <li
                 className={`${styles["review-box-info-bar-list-item"]} ${styles["list-item-date-posted"]}`}
               >
                 <p className={styles["info-header"]}>Date posted</p>
+                
                 <p className={styles["info-text"]}>{review.created_at}</p>
               </li>
               <li className={styles["review-box-info-bar-list-item"]}>
@@ -132,18 +134,18 @@ export default function SingleReview({
               </li>
               <li className={styles["review-box-info-bar-list-item"]}>
                 <div className={styles["add-comment-buttons-container"]}>
-                  <span
+                  <button
                     onClick={() => {
                       setPostingComment((currState) => !currState);
                     }}
                     className={styles["add-comment-button"]}
                   >
                     <i className="fas fa-plus create-and-top-buttons"></i>
-                  </span>
+                  </button>
                 </div>
               </li>
             </ul>
-          </div>
+          </header>
           <div className={styles["main-review-box"]}>
             <img
               className={styles["review-image"]}
@@ -173,10 +175,7 @@ export default function SingleReview({
                   </p>{" "}
                   <p className={styles["extra-info-mobile"]}>
                     Reviewed by {review.owner} -{" "}
-                    {Date(review.created_at).substring(
-                      0,
-                      Date(review.created_at).length - 31
-                    )}
+                    {review.created_at}
                   </p>
                 </>
               )}
@@ -189,7 +188,7 @@ export default function SingleReview({
                 setEdittingReview={setEdittingReview}
                 setNewReviewInput={setNewReviewInput}
               />
-              <span
+              <button
                 onClick={() => {
                   if (
                     window.confirm(
@@ -212,14 +211,14 @@ export default function SingleReview({
               >
                 {" "}
                 <i className="far fa-trash-alt"></i>{" "}
-              </span>
+              </button>
             </>
           )}
         </div>
-      </div>
+      </section>
       {isLoadingComments && <Loading />}
       {!postingComment && totalItems > 0 ? (
-        <div className={styles["comments-container"]}>
+        <section className={styles["comments-container"]}>
           {commentsList.map((commentObj) => {
             return (
               <div
@@ -236,10 +235,7 @@ export default function SingleReview({
                     <li className={styles["comment-box-info-bar-list-item"]}>
                       <p className={styles["info-header"]}>Date posted</p>
                       <p className={styles["info-text"]}>
-                        {Date(commentObj.created_at).substring(
-                          0,
-                          Date(commentObj.created_at).length - 31
-                        )}
+                       {commentObj.created_at}
                       </p>
                     </li>
                     <li className={styles["comment-box-info-bar-list-item"]}>
@@ -291,7 +287,7 @@ export default function SingleReview({
                       setEdittingComment={setEdittingComment}
                       setNewCommentInput={setNewCommentInput}
                     />
-                    <span
+                    <button
                       onClick={() => {
                         if (
                           window.confirm(
@@ -325,13 +321,13 @@ export default function SingleReview({
                     >
                       {" "}
                       <i className="far fa-trash-alt"></i>{" "}
-                    </span>{" "}
+                    </button>{" "}
                   </>
                 )}
               </div>
             );
           })}
-        </div>
+        </section>
       ) : (
         <AddComment
           setTotalItems={setTotalItems}

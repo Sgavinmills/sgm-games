@@ -7,7 +7,7 @@ export default function EditReviewsButton({
   reviewObj,
 }) {
   return (
-    <span
+    <button
       className={styles["edit-button"]}
       onClick={() => {
         setEdittingReview((currObj) => {
@@ -20,6 +20,6 @@ export default function EditReviewsButton({
       }}
     >
       <i className="far fa-edit"></i>
-    </span>
+    </button>
   );
 }

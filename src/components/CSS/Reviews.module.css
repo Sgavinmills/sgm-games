@@ -1,7 +1,7 @@
 
 .reviews-container, .comments-container {
     width: 70%;
-    margin: 6rem auto 0 auto;
+    margin: 6rem auto 1rem auto;
     /* position: relative; */
     /* top: 25vh; */
     /* z-index: -1; */
@@ -64,12 +64,16 @@
     border-radius: 5px;
 }
 
-.category-box-info-bar {
+.category-box-info-bar, .users-box-info-bar {
     padding: 0.5rem 0 0.5rem 0;
     margin: 0;
     border: 1px solid black;
-    background-color: rgba(0, 68, 0, 0.3);  
+    background-color: rgba(99, 22, 26, 0.3);  
     border-radius: 5px;
+}
+
+.users-box-info-bar {
+    background-color: rgba(117, 119, 14, 0.3);  
 
 }
 
@@ -153,18 +157,24 @@
 }
 
 
+button {
+    all: unset;
+}
 
-/*not finishing playing with these yet but works nicely.
-boxes to fill width of screen and have tiny gap between them on small screens (like reddit posts on the app)
-kinda works on large screen too.
+button:hover {
+    cursor: pointer;
+}
 
-can also lose the filter / new review button on small screens and use bottom nav bar instead?
+.switch-user-button {
+    border: 2px solid black;
+    border-radius: 2px;
+    font-size: 1rem;
+}
 
-And still need to shrink text in the review box info bar*/
 @media only screen and (max-width: 1024px) {
     .reviews-container, .comments-container {
         width: 98%;
-        margin: 0.1rem auto 0 auto;
+        margin: 0.1rem auto 1rem auto;
         position: relative;
         /* top: 25vh; */
     }
@@ -178,6 +188,8 @@ And still need to shrink text in the review box info bar*/
         align-items: center;
     }
   }
+
+  
 
 @media only screen and (max-width: 550px) {
     /* .info-header {

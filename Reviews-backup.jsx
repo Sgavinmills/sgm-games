@@ -13,7 +13,6 @@ import DeleteReviewButton from "./reviews-sub-components/DeleteReviewButton";
 import { convertTime } from "./utils/utils";
 import { useParams } from "react-router-dom";
 
-
 export default function Reviews({
   isLoading,
   setIsLoading,
@@ -41,6 +40,7 @@ export default function Reviews({
   });
 
   const [totalItems, setTotalItems] = useState(0);
+
   useEffect(() => {
     setErr(null);
     setIsLoading(true);
@@ -58,20 +58,16 @@ export default function Reviews({
             : "There was an error. Please try again",
         });
       });
-  }, [filters, setIsLoading, categoryName]);
+  }, [filters, setIsLoading]);
   if (err) return <Error err={err} setErr={setErr} />;
   if (isLoading) return <Loading />;
   return (
     <div>
-      <section className={styles["reviews-container"]}>
+      <div className={styles["reviews-container"]}>
         {reviewsList.map((reviewObj) => {
           return (
-            
-            /* <DisplayBox headerItems={[{title: 'Reviewed By', value: reviewObj.owner}, {title: 'Category', value: reviewObj.category},
-          {title : 'Date Posted', value : convertTime(reviewObj.created_at)}, { title : 'Votes', value : reviewObj.votes}, {title : 'Comments', value : reviewObj.comment_count}]}
-            bodyItems={[]}/> */
             <div key={reviewObj.review_id} className={styles["review-box"]}>
-              <header className={styles["review-box-info-bar"]}>
+              <div className={styles["review-box-info-bar"]}>
                 <ul className={styles["review-box-info-bar-list"]}>
                   <li
                     className={`${styles["review-box-info-bar-list-item"]} ${styles["list-item-date-posted"]}`}
@@ -120,7 +116,7 @@ export default function Reviews({
                     </p>
                   </li>
                 </ul>
-              </header>
+              </div>
               <div className={styles["main-review-box"]}>
                 <img
                   className={styles["review-image"]}
@@ -174,16 +170,13 @@ export default function Reviews({
             </div>
           );
         })}
-      </section>
+      </div>
       <div className={styles["create-and-top-buttons-container"]}>
         <Link className={styles.link} to="/addreview">
           {" "}
-          {/* <span className={styles["add-review-button"]}>
+          <span className={styles["add-review-button"]}>
             <i className="fas fa-plus create-and-top-buttons"></i>
-          </span> */}
-            <button className={styles["add-review-button"]}>
-            <i className="fas fa-plus create-and-top-buttons"></i>
-          </button>
+          </span>
         </Link>
       </div>
       <Filters

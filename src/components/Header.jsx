@@ -14,7 +14,7 @@ export default function Header({loggedInUser}) {
                     <Link className={styles.link} to="/reviews"><li>Reviews</li></Link>
                     <Link className={styles.link} to="/categories"><li>Categories</li></Link>
                     <Link className={styles.link} to="/users"><li>Users</li></Link>
-                    <Link className={styles.link} to="/profile"> <li>Profile</li></Link>
+                    
                     </ul>
                 </nav>
             </header>

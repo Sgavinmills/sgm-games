@@ -4,6 +4,7 @@ import Reviews from './components/Reviews.jsx'
 import AddReview from './components/AddReview.jsx'
 import SingleReview from './components/SingleReview.jsx'
 import Categories from './components/Categories.jsx'
+import Users from './components/Users.jsx'
 import { Switch, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getCategories, getLikedReviews } from './API-Funcs/API';
@@ -16,6 +17,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
+  
   const [loggedInUser, setLoggedInUser] = useState({
     username: 'tickle122',
     access: 'admin'
@@ -66,12 +68,17 @@ function App() {
           <AddReview categories={categories} loggedInUser={loggedInUser} />
         </Route>
         <Route exact path="/categories">
-          <Categories categories={categories} setCategories={setCategories} />
+          <Categories categories={categories} isLoading={isLoading} setIsLoading={setIsLoading}/>
         </Route>
 
         <Route exact path="/review/:review_id">
           <SingleReview setErr={setErr}  newReviewInput={newReviewInput} setNewReviewInput={setNewReviewInput} edittingReview={edittingReview} setEdittingReview={setEdittingReview} isLoading={isLoading} setIsLoading={setIsLoading} loggedInUser={loggedInUser} likedReviews={likedReviews} setLikedReviews={setLikedReviews} />
         </Route>
+
+        <Route exact path="/users">
+          <Users setErr={setErr} setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} setIsLoading={setIsLoading} isLoading={isLoading} />
+        </Route>
+        
 
         <Route exact path="/*">
            <Error err={{statusCode : 404, msg : 'Route not found, please try again'}} setErr={setErr}/>
